@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+dist-ssr/
+
+# Environment files
+.env
+.env.local
+*.local
+
+# Ted sensitive data
+ted/store/
+ted/auth_info/
+ted/auth_info_agent_*/
+
+# OS / Editor
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Claude
+.claude/
+
+# Temp files
+ted/temp-*.ts
+ted/start-dashboard.ts
+
+# Lock files (keep package-lock.json)
+bun.lockb
+yarn.lock
+pnpm-lock.yaml
