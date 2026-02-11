@@ -112,17 +112,24 @@
       max-width: 1200px; margin: 0 auto; padding: 0 32px;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .nav-logo-chars { display: flex; gap: 4px; }
-    .nav-logo-char {
-      width: 34px; height: 34px; border-radius: 10px;
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-logo-mark {
+      width: 42px; height: 42px; position: relative;
+      border-radius: 14px; overflow: hidden;
+      background: linear-gradient(135deg, #f97316 0%, #8b5cf6 50%, #6366f1 100%);
+      box-shadow: 0 4px 20px rgba(139,92,246,0.3);
       display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 800; color: #fff;
     }
-    .nav-logo-char.ted { background: var(--gradient-orange); }
-    .nav-logo-char.aria { background: var(--gradient-purple); }
-    .nav-logo-text { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
-    .nav-logo-text .amp { color: var(--text-muted); font-weight: 400; margin: 0 2px; }
+    .nav-logo-mark::before {
+      content: ''; position: absolute; inset: 2px;
+      border-radius: 12px; background: white;
+    }
+    .nav-logo-mark svg { position: relative; z-index: 1; }
+    .nav-logo-text {
+      font-size: 22px; font-weight: 900; letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #8b5cf6, #f97316);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
     .nav-links { display: flex; gap: 32px; align-items: center; }
     .nav-link {
       color: var(--text-secondary); text-decoration: none; font-size: 15px; font-weight: 500;
@@ -533,6 +540,150 @@
     .footer-link { color: var(--text-muted); text-decoration: none; font-size: 14px; transition: color 0.2s; }
     .footer-link:hover { color: var(--primary); }
 
+    /* ==================== DEMO SECTION ==================== */
+    .demo-section { background: var(--bg); overflow: hidden; }
+    .demo-tabs { display: flex; gap: 12px; justify-content: center; margin-bottom: 48px; }
+    .demo-tab {
+      padding: 12px 28px; border-radius: var(--radius-full); font-size: 15px; font-weight: 600;
+      border: 2px solid var(--border); background: var(--bg); color: var(--text-secondary);
+      cursor: pointer; transition: all 0.3s; font-family: inherit;
+    }
+    .demo-tab.active, .demo-tab:hover { border-color: var(--primary); color: var(--primary); background: var(--gradient-soft); }
+    .demo-tab.active.ted, .demo-tab:hover.ted { border-color: var(--orange); color: var(--orange); background: rgba(249,115,22,0.06); }
+    .demo-tab.active.aria, .demo-tab:hover.aria { border-color: var(--purple); color: var(--purple); background: rgba(139,92,246,0.06); }
+    .demo-panel { display: none; }
+    .demo-panel.active { display: block; }
+    .demo-browser {
+      max-width: 1000px; margin: 0 auto; border-radius: var(--radius-lg); overflow: hidden;
+      border: 1px solid var(--border); box-shadow: var(--shadow-xl);
+      background: var(--bg);
+    }
+    .demo-browser-bar {
+      display: flex; align-items: center; gap: 8px; padding: 12px 20px;
+      background: var(--bg-alt); border-bottom: 1px solid var(--border);
+    }
+    .demo-dots { display: flex; gap: 6px; }
+    .demo-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .demo-dot:nth-child(1) { background: #ef4444; }
+    .demo-dot:nth-child(2) { background: #f59e0b; }
+    .demo-dot:nth-child(3) { background: #10b981; }
+    .demo-url {
+      flex: 1; margin: 0 12px; padding: 6px 16px; border-radius: 8px;
+      background: var(--bg); border: 1px solid var(--border); font-size: 13px;
+      color: var(--text-muted); font-family: 'Inter', monospace;
+    }
+    .demo-content {
+      position: relative; width: 100%; height: 500px; overflow: hidden;
+      background: var(--bg-alt);
+    }
+    .demo-content spline-viewer { width: 100%; height: 100%; display: block; }
+    .demo-content-overlay {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      background: linear-gradient(180deg, transparent 30%, rgba(255,255,255,0.9));
+      padding: 32px;
+    }
+    .demo-content-overlay h3 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+    .demo-content-overlay p { font-size: 15px; color: var(--text-secondary); margin-bottom: 20px; max-width: 500px; }
+    .demo-features-row {
+      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 24px;
+    }
+    .demo-feature-chip {
+      padding: 8px 18px; border-radius: var(--radius-full);
+      background: var(--bg); border: 1px solid var(--border);
+      font-size: 13px; font-weight: 600; color: var(--text-secondary);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .demo-cta-row { display: flex; gap: 12px; justify-content: center; margin-top: 32px; }
+    .btn-ted {
+      background: var(--gradient-orange); color: #fff; padding: 12px 32px; border-radius: 12px;
+      font-size: 15px; font-weight: 700; text-decoration: none; transition: all 0.3s;
+      border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+      font-family: inherit; box-shadow: var(--shadow-orange);
+    }
+    .btn-ted:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(249,115,22,0.3); }
+    .btn-aria {
+      background: var(--gradient-purple); color: #fff; padding: 12px 32px; border-radius: 12px;
+      font-size: 15px; font-weight: 700; text-decoration: none; transition: all 0.3s;
+      border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+      font-family: inherit; box-shadow: var(--shadow-purple);
+    }
+    .btn-aria:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(139,92,246,0.3); }
+
+    /* ==================== ARIA STORY ==================== */
+    .story-section { background: var(--bg-alt); }
+    .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .story-visual { position: relative; }
+    .story-3d-wrap {
+      border-radius: var(--radius-xl); overflow: hidden;
+      border: 1px solid rgba(139,92,246,0.2);
+      box-shadow: 0 24px 80px rgba(139,92,246,0.15);
+      background: linear-gradient(135deg, rgba(139,92,246,0.05), rgba(99,102,241,0.05));
+    }
+    .story-3d-wrap spline-viewer { width: 100%; height: 400px; display: block; }
+    .story-text .section-badge { margin-bottom: 20px; }
+    .story-text h2 { font-size: 40px; font-weight: 900; line-height: 1.2; margin-bottom: 20px; letter-spacing: -1px; }
+    .story-text p { font-size: 17px; color: var(--text-secondary); line-height: 1.9; margin-bottom: 16px; }
+    .story-stats { display: flex; gap: 32px; margin-top: 32px; }
+    .story-stat { text-align: center; }
+    .story-stat-num { font-size: 36px; font-weight: 900; }
+    .story-stat-num.purple { color: var(--purple); }
+    .story-stat-num.orange { color: var(--orange); }
+    .story-stat-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+    /* ==================== PLATFORM ACCESS ==================== */
+    .access-section { background: var(--bg); }
+    .access-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    .access-card {
+      border-radius: var(--radius-lg); padding: 48px; position: relative; overflow: hidden;
+      transition: all var(--transition-slow);
+    }
+    .access-card::after {
+      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
+      pointer-events: none;
+    }
+    .access-card.ted-access {
+      background: linear-gradient(135deg, #f97316, #fb923c);
+      color: #fff;
+    }
+    .access-card.ted-access:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(249,115,22,0.3); }
+    .access-card.aria-access {
+      background: linear-gradient(135deg, #8b5cf6, #a855f7);
+      color: #fff;
+    }
+    .access-card.aria-access:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(139,92,246,0.3); }
+    .access-card-icon {
+      width: 60px; height: 60px; border-radius: 16px;
+      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 24px;
+    }
+    .access-card h3 { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
+    .access-card p { font-size: 16px; opacity: 0.9; line-height: 1.7; margin-bottom: 28px; }
+    .access-card-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 32px; border-radius: 12px;
+      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+      color: #fff; font-size: 16px; font-weight: 700; text-decoration: none;
+      border: 2px solid rgba(255,255,255,0.3); transition: all 0.3s;
+    }
+    .access-card-btn:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
+    .access-card-features { list-style: none; margin-bottom: 24px; }
+    .access-card-features li {
+      font-size: 14px; opacity: 0.85; padding: 6px 0;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .access-card-features li svg { width: 16px; height: 16px; opacity: 0.8; }
+
+    @media (max-width: 900px) {
+      .story-grid { grid-template-columns: 1fr; }
+      .story-visual { order: -1; }
+      .story-3d-wrap spline-viewer { height: 280px; }
+      .access-grid { grid-template-columns: 1fr; }
+      .demo-content { height: 350px; }
+      .demo-tabs { flex-wrap: wrap; }
+    }
+
     /* ==================== ANIMATIONS ==================== */
     @keyframes fadeInUp { from { opacity:0; transform: translateY(28px); } to { opacity:1; transform: translateY(0); } }
     @keyframes fadeInDown { from { opacity:0; transform: translateY(-16px); } to { opacity:1; transform: translateY(0); } }
@@ -583,16 +734,20 @@
   <nav class="navbar">
     <div class="nav-inner">
       <a href="#" class="nav-logo">
-        <div class="nav-logo-chars">
-          <div class="nav-logo-char aria">A</div>
-          <div class="nav-logo-char ted">T</div>
+        <div class="nav-logo-mark">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3L4 9V21H9V14H15V21H20V9L12 3Z" fill="url(#logoGrad)" stroke="url(#logoGrad)" stroke-width="1"/>
+            <circle cx="12" cy="10" r="2.5" fill="white"/>
+            <defs><linearGradient id="logoGrad" x1="4" y1="3" x2="20" y2="21"><stop stop-color="#8b5cf6"/><stop offset="1" stop-color="#f97316"/></linearGradient></defs>
+          </svg>
         </div>
-        <span class="nav-logo-text">ARIA <span class="amp">&</span> Ted</span>
+        <span class="nav-logo-text">ARIA & Ted</span>
       </a>
       <div class="nav-links">
         <a href="#meet" class="nav-link">הצוות</a>
+        <a href="#demo" class="nav-link">דמו</a>
         <a href="#features" class="nav-link">יכולות</a>
-        <a href="#how" class="nav-link">איך זה עובד</a>
+        <a href="#access" class="nav-link">גישה</a>
         <a href="#pricing" class="nav-link">תמחור</a>
       </div>
       <a href="#cta" class="nav-cta">התחילו בחינם</a>
@@ -616,7 +771,7 @@
           <div class="hero-char-img-wrap">
             <img src="aria-logo.png" alt="ARIA - AI Campaign Creator">
           </div>
-          <div class="hero-char-name">A.R.I.A</div>
+          <div class="hero-char-name">ARIA</div>
           <div class="hero-char-role">יוצרת הקמפיינים</div>
           <div class="hero-char-badge">AI Campaigns</div>
         </div>
@@ -736,7 +891,7 @@
           <div class="meet-avatar">
             <img src="aria-logo.png" alt="ARIA">
           </div>
-          <h3>A.R.I.A</h3>
+          <h3>ARIA</h3>
           <p class="meet-subtitle">יוצרת הקמפיינים החכמה</p>
           <ul class="meet-features">
             <li>
@@ -842,7 +997,7 @@
           </div>
           <h3>יצירת קמפיינים עם AI</h3>
           <p>כתבו בריף בעברית חופשית ו-AI מנתח ויוצר קמפיין שלם עם קופי, תמונות וקהל יעד.</p>
-          <span class="feature-badge aria">A.R.I.A</span>
+          <span class="feature-badge aria">ARIA</span>
         </div>
         <div class="feature-card fade-in delay-1">
           <div class="feature-icon" style="background:rgba(139,92,246,0.1);color:var(--purple);">
@@ -850,7 +1005,7 @@
           </div>
           <h3>תמונות ודפי נחיתה</h3>
           <p>מחולל תמונות AI מפרומפט בעברית + בונה דפי נחיתה עם תצוגה מקדימה חיה.</p>
-          <span class="feature-badge aria">A.R.I.A</span>
+          <span class="feature-badge aria">ARIA</span>
         </div>
         <div class="feature-card fade-in delay-2">
           <div class="feature-icon" style="background:rgba(139,92,246,0.1);color:var(--purple);">
@@ -858,7 +1013,7 @@
           </div>
           <h3>פרסום ישיר בפייסבוק</h3>
           <p>חיבור OAuth, יצירת קמפיינים, Ad Sets ופרסום ישירות מהממשק בלחיצה אחת.</p>
-          <span class="feature-badge aria">A.R.I.A</span>
+          <span class="feature-badge aria">ARIA</span>
         </div>
         <div class="feature-card fade-in delay-3">
           <div class="feature-icon" style="background:rgba(99,102,241,0.1);color:var(--primary);">
@@ -867,9 +1022,81 @@
           <h3>אנליטיקס ותובנות</h3>
           <p>דשבורד מתקדם עם סטטיסטיקות, פעילות לקוחות ומעקב ביצועי קמפיינים.</p>
           <span class="feature-badge ted">Ted</span>
-          <span class="feature-badge aria" style="margin-right:4px;">A.R.I.A</span>
+          <span class="feature-badge aria" style="margin-right:4px;">ARIA</span>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ==================== DEMO SECTION ==================== -->
+  <section class="demo-section" id="demo">
+    <div class="section-inner">
+      <div class="section-header center fade-in">
+        <div class="section-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          צפו במערכות
+        </div>
+        <h2 class="section-title">ראו את <span class="orange-word">Ted</span> ו-<span class="purple-word">ARIA</span> בפעולה</h2>
+        <p class="section-desc">הצצה לתוך המערכות שעובדות עבורכם 24/7</p>
+      </div>
+
+      <div class="demo-tabs fade-in">
+        <button class="demo-tab ted active" onclick="switchDemo('ted')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          Ted - וואטסאפ AI
+        </button>
+        <button class="demo-tab aria" onclick="switchDemo('aria')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          ARIA - קמפיינים AI
+        </button>
+      </div>
+
+      <!-- Ted Demo -->
+      <div class="demo-panel active" id="demo-ted">
+        <div class="demo-browser fade-in">
+          <div class="demo-browser-bar">
+            <div class="demo-dots"><span class="demo-dot"></span><span class="demo-dot"></span><span class="demo-dot"></span></div>
+            <div class="demo-url">localhost:3777/dashboard</div>
+          </div>
+          <div class="demo-content" style="background: linear-gradient(135deg, rgba(249,115,22,0.05), rgba(251,146,60,0.03));">
+            <div class="demo-content-overlay">
+              <img src="ted-logo.png" alt="Ted" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--orange); margin-bottom:16px; object-fit:cover;">
+              <h3 style="color:var(--orange);">Ted - מרכז הפיקוד של הוואטסאפ</h3>
+              <p>דשבורד אנליטיקס מלא, מענה אוטומטי חכם, CRM, ניהול קבוצות, ושליחת מדיה - הכל מוואטסאפ אחד.</p>
+              <div class="demo-features-row">
+                <span class="demo-feature-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> מענה אוטומטי</span>
+                <span class="demo-feature-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> CRM חכם</span>
+                <span class="demo-feature-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg> אנליטיקס</span>
+                <span class="demo-feature-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg> דשבורד</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ARIA Demo -->
+      <div class="demo-panel" id="demo-aria">
+        <div class="demo-browser fade-in">
+          <div class="demo-browser-bar">
+            <div class="demo-dots"><span class="demo-dot"></span><span class="demo-dot"></span><span class="demo-dot"></span></div>
+            <div class="demo-url">localhost:8080/campaigns</div>
+          </div>
+          <div class="demo-content" style="background: linear-gradient(135deg, rgba(139,92,246,0.05), rgba(168,85,247,0.03));">
+            <div class="demo-content-overlay">
+              <img src="aria-logo.png" alt="ARIA" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--purple); margin-bottom:16px; object-fit:cover;">
+              <h3 style="color:var(--purple);">ARIA - יוצרת הקמפיינים החכמה</h3>
+              <p>יצירת קמפיינים בקליק, מחולל תמונות AI, בניית דפי נחיתה, ופרסום ישיר בפייסבוק - הכל אוטומטי.</p>
+              <div class="demo-features-row">
+                <span class="demo-feature-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/></svg> קמפיינים AI</span>
+                <span class="demo-feature-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> מחולל תמונות</span>
+                <span class="demo-feature-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> דפי נחיתה</span>
+                <span class="demo-feature-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> פייסבוק Ads</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -892,6 +1119,51 @@
           <div class="showcase-hint">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
             הזיזו את העכבר
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ARIA STORY ==================== -->
+  <section class="story-section">
+    <div class="section-inner">
+      <div class="story-grid">
+        <div class="story-visual fade-in">
+          <div class="story-3d-wrap">
+            <spline-viewer url="https://prod.spline.design/PBQQBw8bfXDhBo7w/scene.splinecode" background="rgba(248,250,252,1)" loading="lazy" style="height:400px;"></spline-viewer>
+          </div>
+          <div style="display:flex; justify-content:center; gap:16px; margin-top:24px;">
+            <img src="aria-logo.png" alt="ARIA" style="width:64px; height:64px; border-radius:50%; border:3px solid var(--purple); object-fit:cover; box-shadow:var(--shadow-purple);">
+            <img src="ted-logo.png" alt="Ted" style="width:64px; height:64px; border-radius:50%; border:3px solid var(--orange); object-fit:cover; box-shadow:var(--shadow-orange);">
+          </div>
+        </div>
+        <div class="story-text fade-in">
+          <div class="section-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            הסיפור שלנו
+          </div>
+          <h2>הכירו את <span class="purple-word">ARIA</span> - היוצרת שמאחורי הקלעים</h2>
+          <p>ARIA (AI Resource & Intelligence Assistant) היא מערכת AI שמבינה את העסק שלכם ויוצרת קמפיינים שיווקיים מקצועיים באופן אוטומטי.</p>
+          <p>היא יודעת לכתוב טקסטים שיווקיים, ליצור תמונות עם AI, לבנות דפי נחיתה מלאים, ולפרסם ישירות בפייסבוק - הכל בקליק אחד.</p>
+          <p>ביחד עם <span style="color:var(--orange); font-weight:700;">Ted</span> שמנהל את כל התקשורת בוואטסאפ, הם יוצרים צוות מושלם: ARIA מביאה את הלקוחות ו-Ted מטפל בהם.</p>
+          <div class="story-stats">
+            <div class="story-stat">
+              <div class="story-stat-num purple">∞</div>
+              <div class="story-stat-label">קמפיינים</div>
+            </div>
+            <div class="story-stat">
+              <div class="story-stat-num orange">24/7</div>
+              <div class="story-stat-label">מענה אוטומטי</div>
+            </div>
+            <div class="story-stat">
+              <div class="story-stat-num purple">5x</div>
+              <div class="story-stat-label">יותר לידים</div>
+            </div>
+            <div class="story-stat">
+              <div class="story-stat-num orange">80%</div>
+              <div class="story-stat-label">חיסכון בזמן</div>
+            </div>
           </div>
         </div>
       </div>
@@ -964,6 +1236,59 @@
     </div>
   </section>
 
+  <!-- ==================== PLATFORM ACCESS ==================== -->
+  <section class="access-section" id="access">
+    <div class="section-inner">
+      <div class="section-header center fade-in">
+        <div class="section-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          גישה למערכות
+        </div>
+        <h2 class="section-title">נסו את המערכות <span class="gradient-word">עכשיו</span></h2>
+        <p class="section-desc">גישה ישירה לשתי המערכות. התחילו לעבוד עם הצוות החכם שלכם.</p>
+      </div>
+      <div class="access-grid">
+        <!-- Ted Access -->
+        <div class="access-card ted-access fade-in">
+          <div class="access-card-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          </div>
+          <h3>Ted - וואטסאפ AI</h3>
+          <p>דשבורד מלא לניהול הוואטסאפ. מענה אוטומטי חכם, CRM, ניתוח שיחות, וניהול קבוצות.</p>
+          <ul class="access-card-features">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> דשבורד אנליטיקס בזמן אמת</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> מענה אוטומטי עם Claude AI</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> CRM וניהול לקוחות</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> ריבוי סוכנים ואוטומציה</li>
+          </ul>
+          <a href="http://localhost:3777" target="_blank" class="access-card-btn">
+            פתחו את Ted
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+
+        <!-- ARIA Access -->
+        <div class="access-card aria-access fade-in delay-1">
+          <div class="access-card-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          </div>
+          <h3>ARIA - קמפיינים AI</h3>
+          <p>מערכת יצירת קמפיינים אוטומטית. כתיבת טקסטים, יצירת תמונות, דפי נחיתה, ופרסום בפייסבוק.</p>
+          <ul class="access-card-features">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> יצירת קמפיינים בקליק אחד</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> מחולל תמונות AI (Gemini)</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> בניית דפי נחיתה ויזואלית</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> פרסום ישיר ב-Facebook Ads</li>
+          </ul>
+          <a href="http://localhost:8080" target="_blank" class="access-card-btn">
+            פתחו את ARIA
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ==================== PRICING ==================== -->
   <section class="pricing-section" id="pricing">
     <div class="section-inner">
@@ -983,7 +1308,7 @@
           <div class="price-period">לחודש</div>
           <div class="price-includes">
             <span class="price-char-badge ted">Ted</span>
-            <span class="price-char-badge aria">A.R.I.A</span>
+            <span class="price-char-badge aria">ARIA</span>
           </div>
           <ul class="price-features">
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>מענה אוטומטי בוואטסאפ</li>
@@ -1002,7 +1327,7 @@
           <div class="price-period">לחודש</div>
           <div class="price-includes">
             <span class="price-char-badge ted">Ted Pro</span>
-            <span class="price-char-badge aria">A.R.I.A Pro</span>
+            <span class="price-char-badge aria">ARIA Pro</span>
           </div>
           <ul class="price-features">
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>הכל בסטרטר +</li>
@@ -1022,7 +1347,7 @@
           <div class="price-period">לחודש</div>
           <div class="price-includes">
             <span class="price-char-badge ted">Ted Enterprise</span>
-            <span class="price-char-badge aria">A.R.I.A Enterprise</span>
+            <span class="price-char-badge aria">ARIA Enterprise</span>
           </div>
           <ul class="price-features">
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>הכל בפרו +</li>
@@ -1063,15 +1388,19 @@
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-brand">
-        <div class="footer-logos">
-          <div class="footer-logo-sm" style="background:var(--gradient-purple);">A</div>
-          <div class="footer-logo-sm" style="background:var(--gradient-orange);">T</div>
+        <div class="nav-logo-mark" style="width:32px; height:32px; border-radius:10px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3L4 9V21H9V14H15V21H20V9L12 3Z" fill="url(#footerGrad)" stroke="url(#footerGrad)" stroke-width="1"/>
+            <circle cx="12" cy="10" r="2.5" fill="white"/>
+            <defs><linearGradient id="footerGrad" x1="4" y1="3" x2="20" y2="21"><stop stop-color="#8b5cf6"/><stop offset="1" stop-color="#f97316"/></linearGradient></defs>
+          </svg>
         </div>
         <span class="footer-text">ARIA & Ted &copy; 2026</span>
       </div>
       <div class="footer-links">
         <a href="#meet" class="footer-link">הצוות</a>
-        <a href="#features" class="footer-link">יכולות</a>
+        <a href="#demo" class="footer-link">דמו</a>
+        <a href="#access" class="footer-link">גישה</a>
         <a href="#pricing" class="footer-link">תמחור</a>
         <a href="#" class="footer-link">פרטיות</a>
         <a href="#" class="footer-link">תנאי שימוש</a>
@@ -1142,6 +1471,14 @@
       }
       draw();
     })();
+
+    // Demo tab switching
+    function switchDemo(type) {
+      document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.demo-panel').forEach(p => p.classList.remove('active'));
+      document.querySelector('.demo-tab.' + type).classList.add('active');
+      document.getElementById('demo-' + type).classList.add('active');
+    }
 
     // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(a => {
