@@ -14,6 +14,8 @@
     "ted:dashboard": "npm -w ted run dashboard",
     "aria:dev": "npm -w aria run dev",
     "aria:build": "npm -w aria run build",
-    "aria:preview": "npm -w aria run preview"
+    "aria:preview": "npm -w aria run preview",
+    "aria:mcp": "npm -w @ads-ted/aria-mcp run dev",
+    "aria:mcp:build": "npm -w @ads-ted/aria-mcp run build"
   }
 }

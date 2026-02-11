@@ -15,6 +15,10 @@ ted/store/
 ted/auth_info/
 ted/auth_info_agent_*/
 
+# ARIA MCP sensitive data
+aria/mcp/store/
+aria/mcp/node_modules/
+
 # OS / Editor
 .DS_Store
 .vscode/*
