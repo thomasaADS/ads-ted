@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ARIA & Ted — דשבורד ניהול מאוחד</title>
+  <meta name="description" content="דשבורד ניהול מאוחד — Ted לוואטסאפ ו-ARIA לקמפיינים. כל הלידים, ההודעות והנתונים במקום אחד.">
+  <meta name="theme-color" content="#0a0715">
+  <meta property="og:title" content="ARIA & Ted — דשבורד CRM מאוחד">
+  <meta property="og:description" content="ניהול לידים, הודעות וקמפיינים במקום אחד.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -13,6 +21,7 @@
       --bg-card: #12101f;
       --bg-hover: #1a1630;
       --bg-sidebar: #0e0b1a;
+      --bg-elevated: #161329;
       --purple: #8b5cf6;
       --purple-light: #a78bfa;
       --purple-dark: #7c3aed;
@@ -20,6 +29,7 @@
       --orange-light: #fb923c;
       --indigo: #6366f1;
       --green: #10b981;
+      --green-light: #34d399;
       --red: #ef4444;
       --yellow: #f59e0b;
       --cyan: #06b6d4;
@@ -28,443 +38,1117 @@
       --text-dim: #5a5475;
       --border: #1f1b2e;
       --border-light: #2a2540;
+      --border-glow: rgba(139, 92, 246, 0.2);
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.3);
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     html, body { height: 100%; }
 
     body {
-      font-family: 'Heebo', -apple-system, sans-serif;
+      font-family: 'Heebo', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
-      display: flex; flex-direction: column;
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Focus states */
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--purple);
+      outline-offset: 2px;
     }
 
     /* ==================== TOP BAR ==================== */
     .topbar {
-      height: 56px; min-height: 56px;
+      height: 56px;
+      min-height: 56px;
       background: var(--bg-sidebar);
       border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       padding: 0 24px;
       z-index: 50;
-    }
-    .topbar-right { display: flex; align-items: center; gap: 16px; }
-    .topbar-logo { display: flex; align-items: center; gap: 10px; }
-    .topbar-logo-icon {
-      width: 32px; height: 32px; border-radius: 10px;
-      background: linear-gradient(135deg, #f97316, #8b5cf6);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px; font-weight: 900; color: white;
-    }
-    .topbar-logo-text {
-      font-size: 18px; font-weight: 800;
-      background: linear-gradient(135deg, #8b5cf6, #f97316);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
 
-    /* Tab Navigation */
-    .topbar-tabs { display: flex; gap: 4px; }
-    .topbar-tab {
-      padding: 8px 20px; border-radius: 10px;
-      font-size: 14px; font-weight: 600;
-      color: var(--text-muted); cursor: pointer;
-      transition: all 0.2s; border: none; background: none;
-      font-family: inherit; display: flex; align-items: center; gap: 8px;
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
+
+    .topbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
     }
-    .topbar-tab:hover { background: var(--bg-hover); color: var(--text); }
+
+    .topbar-logo-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--orange), var(--purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 900;
+      color: white;
+      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+    }
+
+    .topbar-logo-text {
+      font-size: 18px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--purple), var(--orange));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: var(--purple); /* fallback */
+    }
+
+    /* Tab Navigation with Sliding Indicator */
+    .topbar-tabs {
+      display: flex;
+      gap: 4px;
+      position: relative;
+    }
+
+    .topbar-tab {
+      padding: 8px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.25s var(--ease-out), background-color 0.25s var(--ease-out);
+      border: none;
+      background: none;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .topbar-tab:hover {
+      background: var(--bg-hover);
+      color: var(--text);
+    }
+
+    .topbar-tab:active {
+      transform: scale(0.97);
+    }
+
     .topbar-tab.active {
-      background: rgba(139,92,246,0.15);
+      background: rgba(139, 92, 246, 0.15);
       color: var(--purple-light);
     }
-    .topbar-tab.ted.active { background: rgba(249,115,22,0.15); color: var(--orange-light); }
+
+    .topbar-tab.ted.active {
+      background: rgba(249, 115, 22, 0.15);
+      color: var(--orange-light);
+    }
+
+    /* Tab icon */
+    .tab-icon {
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    /* Notification badge on tab */
+    .tab-badge {
+      position: absolute;
+      top: 4px;
+      left: 8px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+      animation: pulse-badge 2s ease infinite;
+    }
+
+    @keyframes pulse-badge {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.2); }
+    }
 
     .topbar-left { display: flex; align-items: center; gap: 12px; }
+
     .topbar-status {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 12px; color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
     }
+
     .status-dot {
-      width: 6px; height: 6px; border-radius: 50%;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
       background: var(--green);
-      box-shadow: 0 0 8px rgba(16,185,129,0.5);
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+      animation: pulse-dot 3s ease infinite;
     }
-    .status-dot.offline { background: var(--red); box-shadow: none; }
+
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 8px rgba(16, 185, 129, 0.5); }
+      50% { box-shadow: 0 0 16px rgba(16, 185, 129, 0.8); }
+    }
+
+    .status-dot.offline {
+      background: var(--red);
+      box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+      animation: none;
+    }
+
     .topbar-home {
-      padding: 6px 14px; border-radius: 8px;
-      background: rgba(99,102,241,0.1);
-      color: var(--purple-light); font-size: 12px; font-weight: 600;
-      text-decoration: none; transition: all 0.2s;
+      padding: 6px 14px;
+      border-radius: 8px;
+      background: rgba(99, 102, 241, 0.1);
+      color: var(--purple-light);
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.2s var(--ease-out), transform 0.15s var(--ease-out);
     }
-    .topbar-home:hover { background: rgba(99,102,241,0.2); }
+
+    .topbar-home:hover {
+      background: rgba(99, 102, 241, 0.2);
+      transform: translateX(2px);
+    }
+
+    /* Mobile menu toggle */
+    .mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 22px;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
 
     /* ==================== MAIN LAYOUT ==================== */
     .main-layout {
-      flex: 1; display: flex; overflow: hidden;
+      flex: 1;
+      display: flex;
+      overflow: hidden;
     }
 
     /* ==================== SIDEBAR ==================== */
     .sidebar {
-      width: 220px; min-width: 220px;
+      width: 220px;
+      min-width: 220px;
       background: var(--bg-sidebar);
       border-left: 1px solid var(--border);
       padding: 16px 12px;
-      display: flex; flex-direction: column;
+      display: flex;
+      flex-direction: column;
       overflow-y: auto;
+      transition: transform 0.3s var(--ease-out);
     }
-    .sidebar-section { margin-bottom: 24px; }
-    .sidebar-label {
-      font-size: 11px; font-weight: 700; color: var(--text-dim);
-      text-transform: uppercase; letter-spacing: 0.8px;
-      padding: 0 12px; margin-bottom: 8px;
-    }
-    .sidebar-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 12px; border-radius: 10px;
-      font-size: 14px; color: var(--text-muted);
-      cursor: pointer; transition: all 0.15s;
-      border: none; background: none; width: 100%;
-      text-align: right; font-family: inherit;
-    }
-    .sidebar-item:hover { background: var(--bg-hover); color: var(--text); }
-    .sidebar-item.active {
-      background: rgba(139,92,246,0.12);
-      color: var(--purple-light); font-weight: 600;
-    }
-    .sidebar-icon { font-size: 16px; width: 20px; text-align: center; }
 
+    .sidebar-section { margin-bottom: 24px; }
+
+    .sidebar-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 0 12px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background-color 0.15s var(--ease-out), color 0.15s var(--ease-out), transform 0.1s var(--ease-out);
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: right;
+      font-family: inherit;
+    }
+
+    .sidebar-item:hover {
+      background: var(--bg-hover);
+      color: var(--text);
+    }
+
+    .sidebar-item:active {
+      transform: scale(0.97);
+    }
+
+    .sidebar-item.active {
+      background: rgba(139, 92, 246, 0.12);
+      color: var(--purple-light);
+      font-weight: 600;
+    }
+
+    .sidebar-icon { font-size: 16px; width: 20px; text-align: center; }
     .sidebar-spacer { flex: 1; }
 
-    /* Quick Status */
-    .sidebar-status {
+    /* Quick Status in sidebar */
+    .sidebar-status-box {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 16px;
+      transition: border-color 0.2s var(--ease-out);
     }
+
+    .sidebar-status-box:hover {
+      border-color: var(--border-light);
+    }
+
     .sidebar-status-title {
-      font-size: 12px; font-weight: 700; color: var(--text-dim);
-      margin-bottom: 12px; text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+      text-transform: uppercase;
     }
+
     .sidebar-status-item {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 6px 0; font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 13px;
     }
-    .sidebar-status-name { display: flex; align-items: center; gap: 6px; color: var(--text-muted); }
+
+    .sidebar-status-name {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+    }
+
     .sidebar-status-badge {
-      padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      transition: background-color 0.3s, color 0.3s;
     }
-    .badge-on { background: rgba(16,185,129,0.15); color: var(--green); }
-    .badge-off { background: rgba(239,68,68,0.15); color: var(--red); }
+
+    .badge-on { background: rgba(16, 185, 129, 0.15); color: var(--green); }
+    .badge-off { background: rgba(239, 68, 68, 0.15); color: var(--red); }
 
     /* ==================== CONTENT AREA ==================== */
     .content {
-      flex: 1; overflow-y: auto; overflow-x: hidden;
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
       padding: 24px;
+      scroll-behavior: smooth;
     }
+
+    /* Content scrollbar */
+    .content::-webkit-scrollbar { width: 6px; }
+    .content::-webkit-scrollbar-track { background: transparent; }
+    .content::-webkit-scrollbar-thumb {
+      background: var(--border-light);
+      border-radius: 3px;
+    }
+    .content::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
 
     /* Stats Bar */
     .stats-bar {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
       margin-bottom: 24px;
     }
+
     .stat-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 20px;
-      transition: all 0.2s;
+      transition: border-color 0.25s var(--ease-out), transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
+      position: relative;
+      overflow: hidden;
     }
-    .stat-card:hover { border-color: var(--border-light); background: var(--bg-hover); }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      background: radial-gradient(ellipse at 50% 0%, rgba(139, 92, 246, 0.06) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s var(--ease-out);
+      pointer-events: none;
+    }
+
+    .stat-card:hover {
+      border-color: var(--border-glow);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .stat-card:hover::before { opacity: 1; }
+
     .stat-header {
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       margin-bottom: 12px;
     }
-    .stat-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
     .stat-icon {
-      width: 36px; height: 36px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 16px;
+      transition: transform 0.3s var(--ease-bounce);
     }
-    .stat-value { font-size: 28px; font-weight: 900; }
+
+    .stat-card:hover .stat-icon {
+      transform: scale(1.1) rotate(-5deg);
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.5px;
+    }
+
     .stat-change {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 12px; font-weight: 600; margin-top: 4px;
-      padding: 2px 8px; border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 4px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-variant-numeric: tabular-nums;
     }
-    .stat-change.up { background: rgba(16,185,129,0.1); color: var(--green); }
-    .stat-change.down { background: rgba(239,68,68,0.1); color: var(--red); }
+
+    .stat-change.up { background: rgba(16, 185, 129, 0.1); color: var(--green); }
+    .stat-change.down { background: rgba(239, 68, 68, 0.1); color: var(--red); }
 
     /* Panel Sections */
-    .panel { display: none; }
+    .panel {
+      display: none;
+      animation: fadeIn 0.35s var(--ease-out);
+    }
+
     .panel.active { display: block; }
 
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .panel-title {
-      font-size: 20px; font-weight: 800; margin-bottom: 20px;
-      display: flex; align-items: center; gap: 10px;
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     /* Card Grid */
     .card-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
       margin-bottom: 24px;
     }
+
     .card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 24px;
-      transition: all 0.2s;
-    }
-    .card:hover { border-color: var(--border-light); }
-    .card-title {
-      font-size: 15px; font-weight: 700; margin-bottom: 16px;
-      display: flex; align-items: center; gap: 8px;
+      transition: border-color 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
     }
 
-    /* Table */
+    .card:hover {
+      border-color: var(--border-light);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Data Table */
     .data-table {
-      width: 100%; border-collapse: collapse;
+      width: 100%;
+      border-collapse: collapse;
     }
+
     .data-table th {
-      text-align: right; padding: 12px 16px; font-size: 12px;
-      color: var(--text-dim); font-weight: 600; text-transform: uppercase;
-      letter-spacing: 0.5px; border-bottom: 1px solid var(--border);
+      text-align: right;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: var(--text-dim);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.15s;
+      white-space: nowrap;
     }
+
+    .data-table th:hover { color: var(--text-muted); }
+
+    .data-table th .sort-icon {
+      opacity: 0.3;
+      margin-right: 4px;
+      transition: opacity 0.15s;
+      font-size: 10px;
+    }
+
+    .data-table th:hover .sort-icon { opacity: 0.7; }
+
     .data-table td {
-      padding: 14px 16px; font-size: 14px;
+      padding: 14px 16px;
+      font-size: 14px;
       border-bottom: 1px solid var(--border);
       color: var(--text-muted);
+      transition: background-color 0.15s;
     }
-    .data-table tr:hover td { background: var(--bg-hover); }
-    .data-table .name { color: var(--text); font-weight: 600; }
-    .table-badge {
-      padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
-    }
-    .table-badge.active { background: rgba(16,185,129,0.15); color: var(--green); }
-    .table-badge.paused { background: rgba(245,158,11,0.15); color: var(--yellow); }
-    .table-badge.draft { background: rgba(139,92,246,0.15); color: var(--purple-light); }
-    .table-badge.hot { background: rgba(239,68,68,0.15); color: var(--red); }
-    .table-badge.warm { background: rgba(249,115,22,0.15); color: var(--orange); }
-    .table-badge.cold { background: rgba(99,102,241,0.15); color: var(--indigo); }
 
-    /* Iframe container */
+    .data-table tr {
+      transition: background-color 0.15s;
+    }
+
+    .data-table tbody tr:hover td { background: var(--bg-hover); }
+    .data-table .name { color: var(--text); font-weight: 600; }
+
+    .table-badge {
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .table-badge.active { background: rgba(16, 185, 129, 0.15); color: var(--green); }
+    .table-badge.paused { background: rgba(245, 158, 11, 0.15); color: var(--yellow); }
+    .table-badge.draft { background: rgba(139, 92, 246, 0.15); color: var(--purple-light); }
+    .table-badge.hot { background: rgba(239, 68, 68, 0.15); color: var(--red); }
+    .table-badge.warm { background: rgba(249, 115, 22, 0.15); color: var(--orange); }
+    .table-badge.cold { background: rgba(99, 102, 241, 0.15); color: var(--indigo); }
+
+    /* ==================== IFRAME CONTAINER ==================== */
     .iframe-wrap {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 16px;
       overflow: hidden;
       height: calc(100vh - 200px);
-    }
-    .iframe-header {
-      padding: 12px 20px;
-      background: rgba(0,0,0,0.3);
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .iframe-title { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-    .iframe-badge {
-      padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
-      background: rgba(16,185,129,0.15); color: var(--green);
-    }
-    .iframe-wrap iframe {
-      width: 100%; height: calc(100% - 44px); border: none;
+      position: relative;
     }
 
-    /* Chart placeholder */
-    .chart-placeholder {
+    .iframe-header {
+      padding: 12px 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .iframe-title {
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .iframe-badge {
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--green);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .iframe-badge.offline {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--red);
+    }
+
+    .iframe-content {
+      position: relative;
+      width: 100%;
+      height: calc(100% - 44px);
+    }
+
+    .iframe-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      opacity: 0;
+      transition: opacity 0.4s var(--ease-out);
+    }
+
+    .iframe-wrap iframe.loaded {
+      opacity: 1;
+    }
+
+    /* Iframe loading spinner */
+    .iframe-loader {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      background: var(--bg-card);
+      z-index: 5;
+      transition: opacity 0.3s var(--ease-out);
+    }
+
+    .iframe-loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loader-spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--purple);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loader-text {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Iframe error state */
+    .iframe-error {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: var(--bg-card);
+      z-index: 6;
+    }
+
+    .iframe-error.show {
+      display: flex;
+    }
+
+    .iframe-error-icon {
+      font-size: 48px;
+      opacity: 0.5;
+    }
+
+    .iframe-error-text {
+      font-size: 15px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .iframe-retry-btn {
+      padding: 8px 20px;
+      border-radius: 8px;
+      background: rgba(139, 92, 246, 0.15);
+      color: var(--purple-light);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background-color 0.2s, transform 0.15s;
+    }
+
+    .iframe-retry-btn:hover {
+      background: rgba(139, 92, 246, 0.25);
+    }
+
+    .iframe-retry-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* ==================== CHART ==================== */
+    .chart-container {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 32px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      min-height: 300px;
+      padding: 24px;
+      margin-bottom: 24px;
     }
-    .chart-bars {
-      display: flex; align-items: flex-end; gap: 8px;
-      height: 160px; margin-bottom: 20px;
-    }
-    .chart-bar {
-      width: 32px; border-radius: 6px 6px 0 0;
-      animation: growBar 1s ease forwards;
-      opacity: 0;
-    }
-    @keyframes growBar {
-      from { height: 0; opacity: 0; }
-      to { opacity: 1; }
-    }
-    .chart-label { font-size: 13px; color: var(--text-muted); }
 
-    /* Lead cards */
+    .chart-bars-wrap {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 160px;
+      margin-bottom: 16px;
+      padding: 0 8px;
+    }
+
+    .chart-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .chart-bars-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 140px;
+    }
+
+    .chart-bar {
+      width: 12px;
+      border-radius: 4px 4px 0 0;
+      transform-origin: bottom;
+      transform: scaleY(0);
+      animation: growBar 0.6s var(--ease-out) forwards;
+    }
+
+    @keyframes growBar {
+      to { transform: scaleY(1); }
+    }
+
+    .chart-day-label {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    .chart-legend {
+      display: flex;
+      gap: 24px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .chart-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chart-legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+    }
+
+    /* ==================== LEAD ITEMS ==================== */
     .lead-item {
-      display: flex; align-items: center; gap: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
       padding: 14px 0;
       border-bottom: 1px solid var(--border);
+      transition: background-color 0.15s;
     }
+
     .lead-item:last-child { border: none; }
+
     .lead-avatar {
-      width: 40px; height: 40px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; font-weight: 700;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      flex-shrink: 0;
+      transition: transform 0.2s var(--ease-bounce);
     }
-    .lead-info { flex: 1; }
+
+    .lead-item:hover .lead-avatar {
+      transform: scale(1.08);
+    }
+
+    .lead-info { flex: 1; min-width: 0; }
     .lead-name { font-size: 14px; font-weight: 600; color: var(--text); }
-    .lead-meta { font-size: 12px; color: var(--text-muted); }
+
+    .lead-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     .lead-source { font-size: 11px; }
+
+    /* Progress bars for analytics */
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .progress-row:last-child { margin-bottom: 0; }
+
+    .progress-label {
+      width: 120px;
+      font-size: 13px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 24px;
+      background: var(--bg);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 8px;
+      transform-origin: right;
+      transform: scaleX(0);
+      animation: fillBar 0.8s var(--ease-out) forwards;
+    }
+
+    @keyframes fillBar {
+      to { transform: scaleX(1); }
+    }
+
+    .progress-value {
+      font-size: 13px;
+      font-weight: 700;
+      width: 36px;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ==================== TOAST NOTIFICATION ==================== */
+    .toast-container {
+      position: fixed;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-lg);
+      pointer-events: auto;
+      animation: toastIn 0.4s var(--ease-out), toastOut 0.3s var(--ease-out) 3.7s forwards;
+      backdrop-filter: blur(12px);
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(-16px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes toastOut {
+      to { opacity: 0; transform: translateY(-12px) scale(0.95); }
+    }
+
+    /* ==================== SKELETON LOADER ==================== */
+    .skeleton {
+      background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-hover) 50%, var(--bg-card) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s ease infinite;
+      border-radius: 8px;
+    }
+
+    @keyframes shimmer {
+      from { background-position: 200% 0; }
+      to { background-position: -200% 0; }
+    }
+
+    .skeleton-text { height: 14px; margin-bottom: 8px; }
+    .skeleton-text.short { width: 60%; }
+    .skeleton-stat { height: 32px; width: 80px; margin-bottom: 4px; }
 
     /* ==================== FOOTER STATUS ==================== */
     .bottom-bar {
-      height: 32px; min-height: 32px;
+      height: 32px;
+      min-height: 32px;
       background: var(--bg-sidebar);
       border-top: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       padding: 0 20px;
-      font-size: 11px; color: var(--text-dim);
+      font-size: 11px;
+      color: var(--text-dim);
     }
+
     .bottom-bar-items { display: flex; gap: 20px; }
     .bottom-item { display: flex; align-items: center; gap: 5px; }
 
+    .bottom-bar .status-dot {
+      width: 5px;
+      height: 5px;
+    }
+
     /* ==================== RESPONSIVE ==================== */
-    @media (max-width: 768px) {
-      .sidebar { display: none; }
+    @media (max-width: 1024px) {
       .stats-bar { grid-template-columns: repeat(2, 1fr); }
       .card-grid { grid-template-columns: 1fr; }
-      .topbar-tabs { overflow-x: auto; gap: 2px; }
-      .topbar-tab { padding: 6px 12px; font-size: 13px; white-space: nowrap; }
     }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        right: 0;
+        top: 56px;
+        bottom: 32px;
+        z-index: 40;
+        transform: translateX(100%);
+        box-shadow: -4px 0 24px rgba(0, 0, 0, 0.3);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        top: 56px;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 39;
+      }
+
+      .sidebar-overlay.show { display: block; }
+
+      .mobile-toggle { display: block; }
+
+      .topbar-tabs { overflow-x: auto; gap: 2px; }
+      .topbar-tab { padding: 6px 12px; font-size: 13px; }
+      .topbar-status { display: none; }
+    }
+
     @media (max-width: 480px) {
       .stats-bar { grid-template-columns: 1fr; }
       .content { padding: 16px; }
+      .topbar { padding: 0 12px; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Print */
+    @media print {
+      .topbar, .sidebar, .bottom-bar, .iframe-wrap { display: none; }
+      .content { overflow: visible; padding: 0; }
+      .panel { display: block !important; break-inside: avoid; }
+      body { background: white; color: black; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Toast container -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- Sidebar overlay for mobile -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
   <!-- ==================== TOP BAR ==================== -->
-  <div class="topbar">
+  <header class="topbar" role="banner">
     <div class="topbar-right">
-      <div class="topbar-logo">
-        <div class="topbar-logo-icon">A</div>
-        <span class="topbar-logo-text">CRM</span>
+      <div class="topbar-logo" aria-label="ARIA & Ted CRM">
+        <div class="topbar-logo-icon" aria-hidden="true">A</div>
+        <span class="topbar-logo-text" lang="en">CRM</span>
       </div>
-      <div class="topbar-tabs">
-        <button class="topbar-tab active" data-tab="overview" onclick="switchTab('overview', this)">
-          📊 סקירה
+      <nav class="topbar-tabs" role="tablist" aria-label="ניווט דשבורד">
+        <button class="topbar-tab active" role="tab" aria-selected="true" aria-controls="panel-overview" id="tab-overview" data-tab="overview">
+          <span class="tab-icon" aria-hidden="true">📊</span> סקירה
         </button>
-        <button class="topbar-tab ted" data-tab="ted" onclick="switchTab('ted', this)">
-          💬 Ted
+        <button class="topbar-tab ted" role="tab" aria-selected="false" aria-controls="panel-ted" id="tab-ted" data-tab="ted">
+          <span class="tab-icon" aria-hidden="true">💬</span> <span lang="en">Ted</span>
+          <span class="tab-badge" id="ted-tab-badge" style="display:none;" aria-label="הודעות חדשות"></span>
         </button>
-        <button class="topbar-tab" data-tab="aria" onclick="switchTab('aria', this)">
-          🎯 ARIA
+        <button class="topbar-tab" role="tab" aria-selected="false" aria-controls="panel-aria" id="tab-aria" data-tab="aria">
+          <span class="tab-icon" aria-hidden="true">🎯</span> <span lang="en">ARIA</span>
         </button>
-        <button class="topbar-tab" data-tab="leads" onclick="switchTab('leads', this)">
-          👥 לידים
+        <button class="topbar-tab" role="tab" aria-selected="false" aria-controls="panel-leads" id="tab-leads" data-tab="leads">
+          <span class="tab-icon" aria-hidden="true">👥</span> לידים
         </button>
-        <button class="topbar-tab" data-tab="analytics" onclick="switchTab('analytics', this)">
-          📈 אנליטיקס
+        <button class="topbar-tab" role="tab" aria-selected="false" aria-controls="panel-analytics" id="tab-analytics" data-tab="analytics">
+          <span class="tab-icon" aria-hidden="true">📈</span> אנליטיקס
         </button>
-      </div>
+      </nav>
     </div>
     <div class="topbar-left">
+      <button class="mobile-toggle" id="mobile-toggle" aria-label="תפריט צד">☰</button>
       <div class="topbar-status">
         <div class="status-dot" id="ted-dot"></div>
-        Ted
+        <span lang="en">Ted</span>
       </div>
       <div class="topbar-status">
         <div class="status-dot" id="aria-dot"></div>
-        ARIA
+        <span lang="en">ARIA</span>
       </div>
       <a href="index.html" class="topbar-home">← דף הבית</a>
     </div>
-  </div>
+  </header>
 
   <div class="main-layout">
     <!-- ==================== SIDEBAR ==================== -->
-    <div class="sidebar">
+    <aside class="sidebar" id="sidebar" role="complementary" aria-label="ניווט צד">
       <div class="sidebar-section">
         <div class="sidebar-label">ניווט ראשי</div>
-        <button class="sidebar-item active" onclick="switchTab('overview', document.querySelector('[data-tab=overview]'))">
-          <span class="sidebar-icon">📊</span> סקירה כללית
+        <button class="sidebar-item active" data-sidebar-tab="overview" aria-label="סקירה כללית">
+          <span class="sidebar-icon" aria-hidden="true">📊</span> סקירה כללית
         </button>
-        <button class="sidebar-item" onclick="switchTab('ted', document.querySelector('[data-tab=ted]'))">
-          <span class="sidebar-icon">💬</span> Ted — וואטסאפ
+        <button class="sidebar-item" data-sidebar-tab="ted" aria-label="Ted — וואטסאפ">
+          <span class="sidebar-icon" aria-hidden="true">💬</span> <span lang="en">Ted</span> — וואטסאפ
         </button>
-        <button class="sidebar-item" onclick="switchTab('aria', document.querySelector('[data-tab=aria]'))">
-          <span class="sidebar-icon">🎯</span> ARIA — קמפיינים
+        <button class="sidebar-item" data-sidebar-tab="aria" aria-label="ARIA — קמפיינים">
+          <span class="sidebar-icon" aria-hidden="true">🎯</span> <span lang="en">ARIA</span> — קמפיינים
         </button>
-        <button class="sidebar-item" onclick="switchTab('leads', document.querySelector('[data-tab=leads]'))">
-          <span class="sidebar-icon">👥</span> לידים
+        <button class="sidebar-item" data-sidebar-tab="leads" aria-label="לידים">
+          <span class="sidebar-icon" aria-hidden="true">👥</span> לידים
         </button>
-        <button class="sidebar-item" onclick="switchTab('analytics', document.querySelector('[data-tab=analytics]'))">
-          <span class="sidebar-icon">📈</span> אנליטיקס
+        <button class="sidebar-item" data-sidebar-tab="analytics" aria-label="אנליטיקס">
+          <span class="sidebar-icon" aria-hidden="true">📈</span> אנליטיקס
         </button>
       </div>
 
       <div class="sidebar-section">
         <div class="sidebar-label">פעולות מהירות</div>
-        <button class="sidebar-item" onclick="switchTab('aria', document.querySelector('[data-tab=aria]'))">
-          <span class="sidebar-icon">➕</span> קמפיין חדש
+        <button class="sidebar-item" data-sidebar-tab="aria" aria-label="קמפיין חדש">
+          <span class="sidebar-icon" aria-hidden="true">➕</span> קמפיין חדש
         </button>
-        <button class="sidebar-item" onclick="switchTab('ted', document.querySelector('[data-tab=ted]'))">
-          <span class="sidebar-icon">📤</span> שלח הודעה
+        <button class="sidebar-item" data-sidebar-tab="ted" aria-label="שלח הודעה">
+          <span class="sidebar-icon" aria-hidden="true">📤</span> שלח הודעה
         </button>
       </div>
 
       <div class="sidebar-spacer"></div>
 
-      <div class="sidebar-status">
+      <div class="sidebar-status-box">
         <div class="sidebar-status-title">סטטוס מערכות</div>
         <div class="sidebar-status-item">
-          <span class="sidebar-status-name"><span class="status-dot"></span> Ted</span>
+          <span class="sidebar-status-name"><span class="status-dot" id="sidebar-ted-dot"></span> <span lang="en">Ted</span></span>
           <span class="sidebar-status-badge badge-on" id="sidebar-ted-badge">פעיל</span>
         </div>
         <div class="sidebar-status-item">
-          <span class="sidebar-status-name"><span class="status-dot"></span> ARIA</span>
+          <span class="sidebar-status-name"><span class="status-dot" id="sidebar-aria-dot"></span> <span lang="en">ARIA</span></span>
           <span class="sidebar-status-badge badge-on" id="sidebar-aria-badge">פעילה</span>
         </div>
         <div class="sidebar-status-item">
-          <span class="sidebar-status-name"><span class="status-dot"></span> Supabase</span>
+          <span class="sidebar-status-name"><span class="status-dot"></span> <span lang="en">Supabase</span></span>
           <span class="sidebar-status-badge badge-on">מחובר</span>
         </div>
       </div>
-    </div>
+    </aside>
 
     <!-- ==================== CONTENT ==================== -->
-    <div class="content">
+    <main class="content" role="main">
 
       <!-- ===== OVERVIEW PANEL ===== -->
-      <div class="panel active" id="panel-overview">
+      <div class="panel active" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">
         <div class="stats-bar">
           <div class="stat-card">
             <div class="stat-header">
               <span class="stat-label">הודעות היום</span>
-              <div class="stat-icon" style="background:rgba(249,115,22,0.1);">💬</div>
+              <div class="stat-icon" style="background:rgba(249,115,22,0.1);" aria-hidden="true">💬</div>
             </div>
-            <div class="stat-value" id="stat-messages">1,284</div>
+            <div class="stat-value" data-counter="1284" data-suffix="">0</div>
             <span class="stat-change up">↑ 12%</span>
           </div>
           <div class="stat-card">
             <div class="stat-header">
               <span class="stat-label">קמפיינים פעילים</span>
-              <div class="stat-icon" style="background:rgba(139,92,246,0.1);">🎯</div>
+              <div class="stat-icon" style="background:rgba(139,92,246,0.1);" aria-hidden="true">🎯</div>
             </div>
-            <div class="stat-value" id="stat-campaigns">23</div>
+            <div class="stat-value" data-counter="23" data-suffix="">0</div>
             <span class="stat-change up">↑ 3 חדשים</span>
           </div>
           <div class="stat-card">
             <div class="stat-header">
               <span class="stat-label">לידים חדשים</span>
-              <div class="stat-icon" style="background:rgba(16,185,129,0.1);">👥</div>
+              <div class="stat-icon" style="background:rgba(16,185,129,0.1);" aria-hidden="true">👥</div>
             </div>
-            <div class="stat-value" id="stat-leads">847</div>
+            <div class="stat-value" data-counter="847" data-suffix="">0</div>
             <span class="stat-change up">↑ 28%</span>
           </div>
           <div class="stat-card">
             <div class="stat-header">
-              <span class="stat-label">ROI ממוצע</span>
-              <div class="stat-icon" style="background:rgba(99,102,241,0.1);">📊</div>
+              <span class="stat-label" lang="en">ROI</span> <span class="stat-label">ממוצע</span>
+              <div class="stat-icon" style="background:rgba(99,102,241,0.1);" aria-hidden="true">📊</div>
             </div>
-            <div class="stat-value">340%</div>
+            <div class="stat-value" data-counter="340" data-suffix="%">0</div>
             <span class="stat-change up">↑ 15%</span>
           </div>
         </div>
@@ -472,14 +1156,14 @@
         <div class="card-grid">
           <!-- Recent Messages -->
           <div class="card">
-            <div class="card-title">💬 הודעות אחרונות — Ted</div>
+            <div class="card-title">💬 הודעות אחרונות — <span lang="en">Ted</span></div>
             <div class="lead-item">
               <div class="lead-avatar" style="background:rgba(249,115,22,0.15); color:var(--orange);">ד</div>
               <div class="lead-info">
                 <div class="lead-name">דניאל כהן</div>
                 <div class="lead-meta">היי, רציתי לשאול על המחירים...</div>
               </div>
-              <span class="lead-source table-badge hot">חם</span>
+              <span class="lead-source table-badge hot">חם 🔥</span>
             </div>
             <div class="lead-item">
               <div class="lead-avatar" style="background:rgba(139,92,246,0.15); color:var(--purple);">מ</div>
@@ -487,7 +1171,7 @@
                 <div class="lead-name">מיכל לוי</div>
                 <div class="lead-meta">תודה על המידע, אני מעוניינת!</div>
               </div>
-              <span class="lead-source table-badge warm">חם</span>
+              <span class="lead-source table-badge warm">חמים</span>
             </div>
             <div class="lead-item">
               <div class="lead-avatar" style="background:rgba(16,185,129,0.15); color:var(--green);">א</div>
@@ -495,35 +1179,40 @@
                 <div class="lead-name">אבי ישראלי</div>
                 <div class="lead-meta">מתי אפשר להתחיל?</div>
               </div>
-              <span class="lead-source table-badge active">סגור</span>
+              <span class="lead-source table-badge active">סגור ✓</span>
             </div>
           </div>
 
           <!-- Active Campaigns -->
           <div class="card">
-            <div class="card-title">🎯 קמפיינים פעילים — ARIA</div>
+            <div class="card-title">🎯 קמפיינים פעילים — <span lang="en">ARIA</span></div>
             <table class="data-table">
               <thead>
-                <tr><th>שם</th><th>פלטפורמה</th><th>סטטוס</th><th>ROI</th></tr>
+                <tr>
+                  <th>שם <span class="sort-icon">⇅</span></th>
+                  <th>פלטפורמה</th>
+                  <th>סטטוס</th>
+                  <th><span lang="en">ROI</span> <span class="sort-icon">⇅</span></th>
+                </tr>
               </thead>
               <tbody>
                 <tr>
                   <td class="name">קמפיין חורף 2025</td>
-                  <td>📘 Facebook</td>
+                  <td>📘 <span lang="en">Facebook</span></td>
                   <td><span class="table-badge active">פעיל</span></td>
-                  <td style="color:var(--green);">+285%</td>
+                  <td style="color:var(--green); font-variant-numeric:tabular-nums;">+285%</td>
                 </tr>
                 <tr>
                   <td class="name">השקת מוצר חדש</td>
-                  <td>🔍 Google</td>
+                  <td>🔍 <span lang="en">Google</span></td>
                   <td><span class="table-badge active">פעיל</span></td>
-                  <td style="color:var(--green);">+420%</td>
+                  <td style="color:var(--green); font-variant-numeric:tabular-nums;">+420%</td>
                 </tr>
                 <tr>
-                  <td class="name">ריטרגטינג Q1</td>
-                  <td>📘 Facebook</td>
+                  <td class="name">ריטרגטינג <span lang="en">Q1</span></td>
+                  <td>📘 <span lang="en">Facebook</span></td>
                   <td><span class="table-badge paused">מושהה</span></td>
-                  <td style="color:var(--yellow);">+140%</td>
+                  <td style="color:var(--yellow); font-variant-numeric:tabular-nums;">+140%</td>
                 </tr>
               </tbody>
             </table>
@@ -531,81 +1220,107 @@
         </div>
 
         <!-- Performance Chart -->
-        <div class="card" style="margin-bottom:24px;">
+        <div class="chart-container">
           <div class="card-title">📈 ביצועים — 7 ימים אחרונים</div>
-          <div class="chart-bars" id="overview-chart">
-            <!-- Generated by JS -->
-          </div>
-          <div style="display:flex; gap:24px; font-size:12px; color:var(--text-muted);">
-            <span>🟠 הודעות</span>
-            <span>🟣 קמפיינים</span>
-            <span>🟢 לידים</span>
+          <div class="chart-bars-wrap" id="overview-chart"></div>
+          <div class="chart-legend">
+            <span class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--orange);"></span> הודעות</span>
+            <span class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--purple);"></span> קמפיינים</span>
+            <span class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--green);"></span> לידים</span>
           </div>
         </div>
       </div>
 
       <!-- ===== TED PANEL ===== -->
-      <div class="panel" id="panel-ted">
-        <div class="panel-title">💬 Ted — ניהול וואטסאפ</div>
-        <div class="iframe-wrap">
+      <div class="panel" id="panel-ted" role="tabpanel" aria-labelledby="tab-ted">
+        <div class="panel-title">💬 <span lang="en">Ted</span> — ניהול וואטסאפ</div>
+        <div class="iframe-wrap" id="ted-iframe-wrap">
           <div class="iframe-header">
             <div class="iframe-title">
-              <span style="color:var(--orange);">●</span> Ted Dashboard
+              <span style="color:var(--orange);">●</span> <span lang="en">Ted Dashboard</span>
             </div>
-            <span class="iframe-badge">● מחובר</span>
+            <span class="iframe-badge" id="ted-iframe-badge">● מחובר</span>
           </div>
-          <iframe src="http://localhost:3777" id="ted-iframe"></iframe>
+          <div class="iframe-content">
+            <div class="iframe-loader" id="ted-loader">
+              <div class="loader-spinner" style="border-top-color:var(--orange);"></div>
+              <span class="loader-text">טוען את <span lang="en">Ted</span>...</span>
+            </div>
+            <div class="iframe-error" id="ted-error">
+              <div class="iframe-error-icon">😵</div>
+              <div class="iframe-error-text"><span lang="en">Ted</span> לא זמין כרגע.<br>ודאו שהשרת פועל בפורט <span lang="en">3777</span></div>
+              <button class="iframe-retry-btn" onclick="retryIframe('ted')">🔄 נסה שוב</button>
+            </div>
+            <iframe data-src="http://localhost:3777" id="ted-iframe" title="Ted Dashboard"></iframe>
+          </div>
         </div>
       </div>
 
       <!-- ===== ARIA PANEL ===== -->
-      <div class="panel" id="panel-aria">
-        <div class="panel-title">🎯 ARIA — ניהול קמפיינים</div>
-        <div class="iframe-wrap">
+      <div class="panel" id="panel-aria" role="tabpanel" aria-labelledby="tab-aria">
+        <div class="panel-title">🎯 <span lang="en">ARIA</span> — ניהול קמפיינים</div>
+        <div class="iframe-wrap" id="aria-iframe-wrap">
           <div class="iframe-header">
             <div class="iframe-title">
-              <span style="color:var(--purple);">●</span> ARIA MCP Dashboard
+              <span style="color:var(--purple);">●</span> <span lang="en">ARIA MCP Dashboard</span>
             </div>
-            <span class="iframe-badge">● מחוברת</span>
+            <span class="iframe-badge" id="aria-iframe-badge">● מחוברת</span>
           </div>
-          <iframe src="http://localhost:3888" id="aria-iframe"></iframe>
+          <div class="iframe-content">
+            <div class="iframe-loader" id="aria-loader">
+              <div class="loader-spinner"></div>
+              <span class="loader-text">טוענת את <span lang="en">ARIA</span>...</span>
+            </div>
+            <div class="iframe-error" id="aria-error">
+              <div class="iframe-error-icon">😵</div>
+              <div class="iframe-error-text"><span lang="en">ARIA</span> לא זמינה כרגע.<br>ודאו שהשרת פועל בפורט <span lang="en">3888</span></div>
+              <button class="iframe-retry-btn" onclick="retryIframe('aria')">🔄 נסה שוב</button>
+            </div>
+            <iframe data-src="http://localhost:3888" id="aria-iframe" title="ARIA MCP Dashboard"></iframe>
+          </div>
         </div>
       </div>
 
       <!-- ===== LEADS PANEL ===== -->
-      <div class="panel" id="panel-leads">
+      <div class="panel" id="panel-leads" role="tabpanel" aria-labelledby="tab-leads">
         <div class="panel-title">👥 לידים מכל המקורות</div>
 
         <div class="stats-bar" style="grid-template-columns: repeat(3, 1fr);">
           <div class="stat-card">
             <div class="stat-header">
               <span class="stat-label">לידים חמים</span>
-              <div class="stat-icon" style="background:rgba(239,68,68,0.1);">🔥</div>
+              <div class="stat-icon" style="background:rgba(239,68,68,0.1);" aria-hidden="true">🔥</div>
             </div>
-            <div class="stat-value">124</div>
+            <div class="stat-value" data-counter="124" data-suffix="">0</div>
             <span class="stat-change up">↑ 18%</span>
           </div>
           <div class="stat-card">
             <div class="stat-header">
               <span class="stat-label">מוואטסאפ</span>
-              <div class="stat-icon" style="background:rgba(249,115,22,0.1);">💬</div>
+              <div class="stat-icon" style="background:rgba(249,115,22,0.1);" aria-hidden="true">💬</div>
             </div>
-            <div class="stat-value">389</div>
+            <div class="stat-value" data-counter="389" data-suffix="">0</div>
           </div>
           <div class="stat-card">
             <div class="stat-header">
               <span class="stat-label">מקמפיינים</span>
-              <div class="stat-icon" style="background:rgba(139,92,246,0.1);">🎯</div>
+              <div class="stat-icon" style="background:rgba(139,92,246,0.1);" aria-hidden="true">🎯</div>
             </div>
-            <div class="stat-value">458</div>
+            <div class="stat-value" data-counter="458" data-suffix="">0</div>
           </div>
         </div>
 
         <div class="card">
           <div class="card-title">רשימת לידים</div>
-          <table class="data-table">
+          <table class="data-table" id="leads-table">
             <thead>
-              <tr><th>שם</th><th>מקור</th><th>סטטוס</th><th>תאריך</th><th>פעולה אחרונה</th></tr>
+              <tr>
+                <th data-sort="name">שם <span class="sort-icon">⇅</span></th>
+                <th>מקור</th>
+                <th data-sort="status">סטטוס <span class="sort-icon">⇅</span></th>
+                <th data-sort="date">תאריך <span class="sort-icon">⇅</span></th>
+                <th>פעולה אחרונה</th>
+              </tr>
             </thead>
             <tbody>
               <tr>
@@ -617,14 +1332,14 @@
               </tr>
               <tr>
                 <td class="name">שרה אברהם</td>
-                <td>📘 Facebook</td>
+                <td>📘 <span lang="en">Facebook</span></td>
                 <td><span class="table-badge warm">חמים</span></td>
                 <td>היום 12:15</td>
                 <td>לחצה על מודעה</td>
               </tr>
               <tr>
                 <td class="name">יוסי חדד</td>
-                <td>🔍 Google</td>
+                <td>🔍 <span lang="en">Google</span></td>
                 <td><span class="table-badge warm">חמים</span></td>
                 <td>אתמול 18:44</td>
                 <td>מילא טופס</td>
@@ -638,14 +1353,14 @@
               </tr>
               <tr>
                 <td class="name">עמית פרידמן</td>
-                <td>📘 Facebook</td>
+                <td>📘 <span lang="en">Facebook</span></td>
                 <td><span class="table-badge cold">קר</span></td>
                 <td>לפני 3 ימים</td>
                 <td>צפה בדף</td>
               </tr>
               <tr>
                 <td class="name">נועה ברק</td>
-                <td>🔍 Google</td>
+                <td>🔍 <span lang="en">Google</span></td>
                 <td><span class="table-badge hot">חם 🔥</span></td>
                 <td>היום 16:05</td>
                 <td>בקשת הצעת מחיר</td>
@@ -663,41 +1378,41 @@
       </div>
 
       <!-- ===== ANALYTICS PANEL ===== -->
-      <div class="panel" id="panel-analytics">
+      <div class="panel" id="panel-analytics" role="tabpanel" aria-labelledby="tab-analytics">
         <div class="panel-title">📈 אנליטיקס ודוחות</div>
 
         <div class="stats-bar">
           <div class="stat-card">
             <div class="stat-header">
               <span class="stat-label">הכנסות החודש</span>
-              <div class="stat-icon" style="background:rgba(16,185,129,0.1);">💰</div>
+              <div class="stat-icon" style="background:rgba(16,185,129,0.1);" aria-hidden="true">💰</div>
             </div>
-            <div class="stat-value">₪48,200</div>
+            <div class="stat-value" data-counter="48200" data-suffix="" data-prefix="₪">0</div>
             <span class="stat-change up">↑ 22%</span>
           </div>
           <div class="stat-card">
             <div class="stat-header">
               <span class="stat-label">הוצאות פרסום</span>
-              <div class="stat-icon" style="background:rgba(239,68,68,0.1);">📊</div>
+              <div class="stat-icon" style="background:rgba(239,68,68,0.1);" aria-hidden="true">📊</div>
             </div>
-            <div class="stat-value">₪12,400</div>
+            <div class="stat-value" data-counter="12400" data-suffix="" data-prefix="₪">0</div>
             <span class="stat-change down">↓ 8%</span>
           </div>
           <div class="stat-card">
             <div class="stat-header">
               <span class="stat-label">רווח נקי</span>
-              <div class="stat-icon" style="background:rgba(99,102,241,0.1);">💎</div>
+              <div class="stat-icon" style="background:rgba(99,102,241,0.1);" aria-hidden="true">💎</div>
             </div>
-            <div class="stat-value">₪35,800</div>
+            <div class="stat-value" data-counter="35800" data-suffix="" data-prefix="₪">0</div>
             <span class="stat-change up">↑ 34%</span>
           </div>
           <div class="stat-card">
             <div class="stat-header">
               <span class="stat-label">עלות לליד</span>
-              <div class="stat-icon" style="background:rgba(6,182,212,0.1);">🎯</div>
+              <div class="stat-icon" style="background:rgba(6,182,212,0.1);" aria-hidden="true">🎯</div>
             </div>
-            <div class="stat-value">₪14.6</div>
-            <span class="stat-change up">↓ 12%</span>
+            <div class="stat-value" data-counter="14.6" data-suffix="" data-prefix="₪" data-decimal="true">0</div>
+            <span class="stat-change down">↓ 12%</span>
           </div>
         </div>
 
@@ -705,26 +1420,26 @@
           <div class="card">
             <div class="card-title">📊 לידים לפי מקור</div>
             <div style="padding: 20px 0;">
-              <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
-                <div style="width:120px; font-size:13px; color:var(--text-muted);">💬 וואטסאפ</div>
-                <div style="flex:1; height:24px; background:var(--bg); border-radius:8px; overflow:hidden;">
-                  <div style="width:46%; height:100%; background: linear-gradient(90deg, #f97316, #fb923c); border-radius:8px;"></div>
+              <div class="progress-row">
+                <div class="progress-label">💬 וואטסאפ</div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width:46%; background:linear-gradient(90deg, var(--orange), var(--orange-light));"></div>
                 </div>
-                <span style="font-size:13px; font-weight:700;">46%</span>
+                <span class="progress-value">46%</span>
               </div>
-              <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
-                <div style="width:120px; font-size:13px; color:var(--text-muted);">📘 Facebook</div>
-                <div style="flex:1; height:24px; background:var(--bg); border-radius:8px; overflow:hidden;">
-                  <div style="width:32%; height:100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); border-radius:8px;"></div>
+              <div class="progress-row">
+                <div class="progress-label">📘 <span lang="en">Facebook</span></div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width:32%; background:linear-gradient(90deg, #3b82f6, #60a5fa);"></div>
                 </div>
-                <span style="font-size:13px; font-weight:700;">32%</span>
+                <span class="progress-value">32%</span>
               </div>
-              <div style="display:flex; align-items:center; gap:12px;">
-                <div style="width:120px; font-size:13px; color:var(--text-muted);">🔍 Google</div>
-                <div style="flex:1; height:24px; background:var(--bg); border-radius:8px; overflow:hidden;">
-                  <div style="width:22%; height:100%; background: linear-gradient(90deg, #10b981, #34d399); border-radius:8px;"></div>
+              <div class="progress-row">
+                <div class="progress-label">🔍 <span lang="en">Google</span></div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width:22%; background:linear-gradient(90deg, var(--green), var(--green-light));"></div>
                 </div>
-                <span style="font-size:13px; font-weight:700;">22%</span>
+                <span class="progress-value">22%</span>
               </div>
             </div>
           </div>
@@ -732,22 +1447,26 @@
             <div class="card-title">🏆 קמפיינים מובילים</div>
             <table class="data-table">
               <thead>
-                <tr><th>קמפיין</th><th>ROI</th><th>לידים</th></tr>
+                <tr>
+                  <th>קמפיין</th>
+                  <th><span lang="en">ROI</span></th>
+                  <th>לידים</th>
+                </tr>
               </thead>
               <tbody>
                 <tr>
                   <td class="name">השקת מוצר חדש</td>
-                  <td style="color:var(--green); font-weight:700;">+420%</td>
+                  <td style="color:var(--green); font-weight:700; font-variant-numeric:tabular-nums;">+420%</td>
                   <td>234</td>
                 </tr>
                 <tr>
                   <td class="name">קמפיין חורף 2025</td>
-                  <td style="color:var(--green); font-weight:700;">+285%</td>
+                  <td style="color:var(--green); font-weight:700; font-variant-numeric:tabular-nums;">+285%</td>
                   <td>189</td>
                 </tr>
                 <tr>
-                  <td class="name">ריטרגטינג Q1</td>
-                  <td style="color:var(--yellow); font-weight:700;">+140%</td>
+                  <td class="name">ריטרגטינג <span lang="en">Q1</span></td>
+                  <td style="color:var(--yellow); font-weight:700; font-variant-numeric:tabular-nums;">+140%</td>
                   <td>78</td>
                 </tr>
               </tbody>
@@ -756,73 +1475,256 @@
         </div>
 
         <!-- Weekly chart -->
-        <div class="card">
+        <div class="chart-container">
           <div class="card-title">📈 מגמות — 30 יום אחרונים</div>
-          <div class="chart-bars" id="analytics-chart"></div>
-          <div style="display:flex; gap:24px; font-size:12px; color:var(--text-muted);">
-            <span>🟢 הכנסות</span>
-            <span>🔴 הוצאות</span>
-            <span>🟣 לידים</span>
+          <div class="chart-bars-wrap" id="analytics-chart"></div>
+          <div class="chart-legend">
+            <span class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--green);"></span> הכנסות</span>
+            <span class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--red);"></span> הוצאות</span>
+            <span class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--purple);"></span> לידים</span>
           </div>
         </div>
       </div>
 
-    </div>
+    </main>
   </div>
 
   <!-- ==================== BOTTOM BAR ==================== -->
-  <div class="bottom-bar">
+  <footer class="bottom-bar" role="contentinfo">
     <div class="bottom-bar-items">
       <div class="bottom-item">
-        <div class="status-dot"></div>
+        <div class="status-dot" id="all-systems-dot"></div>
         כל המערכות פעילות
       </div>
       <div class="bottom-item" id="uptime-display">זמן פעילות: 0m</div>
     </div>
-    <div>ARIA & Ted CRM v1.0</div>
-  </div>
+    <div><span lang="en">ARIA & Ted CRM</span> v1.0 · <span id="current-year"></span></div>
+  </footer>
 
   <!-- ==================== SCRIPTS ==================== -->
   <script>
-    // Tab switching
-    function switchTab(tabId, btn) {
-      // Update tab buttons
-      document.querySelectorAll('.topbar-tab').forEach(t => t.classList.remove('active'));
-      if (btn) btn.classList.add('active');
+  (function() {
+    'use strict';
 
-      // Update sidebar items
-      document.querySelectorAll('.sidebar-item').forEach((item, i) => {
-        const tabs = ['overview', 'ted', 'aria', 'leads', 'analytics'];
-        item.classList.toggle('active', tabs[i] === tabId);
+    // ========== DYNAMIC YEAR ==========
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+
+    // ========== TAB SWITCHING ==========
+    const tabButtons = document.querySelectorAll('.topbar-tab[data-tab]');
+    const sidebarItems = document.querySelectorAll('.sidebar-item[data-sidebar-tab]');
+    const panels = document.querySelectorAll('.panel');
+    let activeTab = 'overview';
+
+    function switchTab(tabId) {
+      if (tabId === activeTab) return;
+      activeTab = tabId;
+
+      // Update tab buttons
+      tabButtons.forEach(function(t) {
+        const isActive = t.dataset.tab === tabId;
+        t.classList.toggle('active', isActive);
+        t.setAttribute('aria-selected', isActive ? 'true' : 'false');
       });
 
-      // Show panel
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      const panel = document.getElementById('panel-' + tabId);
-      if (panel) panel.classList.add('active');
+      // Update sidebar items (match by data-sidebar-tab)
+      sidebarItems.forEach(function(item) {
+        item.classList.toggle('active', item.dataset.sidebarTab === tabId);
+      });
+
+      // Show panel with animation
+      panels.forEach(function(p) { p.classList.remove('active'); });
+      var panel = document.getElementById('panel-' + tabId);
+      if (panel) {
+        panel.classList.add('active');
+        // Re-trigger counter animations for this panel
+        animateCounters(panel);
+        // Re-trigger progress bar animations
+        animateProgressBars(panel);
+      }
+
+      // Lazy-load iframe when tab is first shown
+      if (tabId === 'ted' || tabId === 'aria') {
+        loadIframe(tabId);
+      }
+
+      // Close mobile sidebar
+      closeMobileSidebar();
     }
 
-    // Generate chart bars
+    // Bind tab clicks
+    tabButtons.forEach(function(btn) {
+      btn.addEventListener('click', function() { switchTab(btn.dataset.tab); });
+    });
+
+    // Bind sidebar clicks
+    sidebarItems.forEach(function(item) {
+      item.addEventListener('click', function() { switchTab(item.dataset.sidebarTab); });
+    });
+
+    // ========== MOBILE SIDEBAR ==========
+    var mobileToggle = document.getElementById('mobile-toggle');
+    var sidebar = document.getElementById('sidebar');
+    var overlay = document.getElementById('sidebar-overlay');
+
+    function openMobileSidebar() {
+      sidebar.classList.add('open');
+      overlay.classList.add('show');
+    }
+
+    function closeMobileSidebar() {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('show');
+    }
+
+    if (mobileToggle) {
+      mobileToggle.addEventListener('click', function() {
+        if (sidebar.classList.contains('open')) {
+          closeMobileSidebar();
+        } else {
+          openMobileSidebar();
+        }
+      });
+    }
+
+    if (overlay) {
+      overlay.addEventListener('click', closeMobileSidebar);
+    }
+
+    // ========== LAZY IFRAME LOADING ==========
+    var iframeLoaded = { ted: false, aria: false };
+    var iframeTimeout = { ted: null, aria: null };
+
+    function loadIframe(type) {
+      if (iframeLoaded[type]) return;
+
+      var iframe = document.getElementById(type + '-iframe');
+      var loader = document.getElementById(type + '-loader');
+      var error = document.getElementById(type + '-error');
+      var badge = document.getElementById(type + '-iframe-badge');
+
+      if (!iframe || !iframe.dataset.src) return;
+
+      // Reset states
+      loader.classList.remove('hidden');
+      error.classList.remove('show');
+      iframe.classList.remove('loaded');
+
+      iframe.src = iframe.dataset.src;
+
+      // Timeout: if iframe doesn't load within 8 seconds, show error
+      iframeTimeout[type] = setTimeout(function() {
+        if (!iframeLoaded[type]) {
+          loader.classList.add('hidden');
+          error.classList.add('show');
+          if (badge) {
+            badge.textContent = '● לא מחובר';
+            badge.classList.add('offline');
+          }
+        }
+      }, 8000);
+
+      iframe.addEventListener('load', function onLoad() {
+        clearTimeout(iframeTimeout[type]);
+        iframeLoaded[type] = true;
+        loader.classList.add('hidden');
+        iframe.classList.add('loaded');
+        iframe.removeEventListener('load', onLoad);
+      }, { once: true });
+
+      iframe.addEventListener('error', function onError() {
+        clearTimeout(iframeTimeout[type]);
+        loader.classList.add('hidden');
+        error.classList.add('show');
+        if (badge) {
+          badge.textContent = '● לא מחובר';
+          badge.classList.add('offline');
+        }
+        iframe.removeEventListener('error', onError);
+      }, { once: true });
+    }
+
+    // Retry iframe
+    window.retryIframe = function(type) {
+      iframeLoaded[type] = false;
+      loadIframe(type);
+    };
+
+    // ========== COUNTER ANIMATION ==========
+    function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+
+    function animateCounters(container) {
+      var counters = (container || document).querySelectorAll('[data-counter]');
+      counters.forEach(function(el) {
+        var target = parseFloat(el.dataset.counter);
+        var suffix = el.dataset.suffix || '';
+        var prefix = el.dataset.prefix || '';
+        var isDecimal = el.dataset.decimal === 'true';
+        var duration = 1200;
+        var startTime = null;
+
+        function step(timestamp) {
+          if (!startTime) startTime = timestamp;
+          var progress = Math.min((timestamp - startTime) / duration, 1);
+          var val = easeOutQuart(progress) * target;
+
+          if (isDecimal) {
+            el.textContent = prefix + val.toFixed(1);
+          } else if (target >= 1000) {
+            el.textContent = prefix + Math.floor(val).toLocaleString('he-IL');
+          } else {
+            el.textContent = prefix + Math.floor(val);
+          }
+
+          if (suffix) el.textContent += suffix;
+
+          if (progress < 1) {
+            requestAnimationFrame(step);
+          }
+        }
+
+        requestAnimationFrame(step);
+      });
+    }
+
+    // ========== PROGRESS BAR ANIMATION ==========
+    function animateProgressBars(container) {
+      var fills = (container || document).querySelectorAll('.progress-fill');
+      fills.forEach(function(fill) {
+        fill.style.transform = 'scaleX(0)';
+        requestAnimationFrame(function() {
+          fill.style.transform = '';
+        });
+      });
+    }
+
+    // ========== CHART GENERATOR ==========
     function generateChart(containerId, colors, count) {
-      const container = document.getElementById(containerId);
+      var container = document.getElementById(containerId);
       if (!container) return;
       container.innerHTML = '';
-      const days = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'];
+      var days = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳'];
 
-      for (let i = 0; i < (count || 7); i++) {
-        const group = document.createElement('div');
-        group.style.cssText = 'display:flex; flex-direction:column; align-items:center; gap:4px;';
+      for (var i = 0; i < (count || 7); i++) {
+        var group = document.createElement('div');
+        group.className = 'chart-group';
 
-        colors.forEach((color, ci) => {
-          const bar = document.createElement('div');
-          const height = 30 + Math.random() * 100;
+        var barsRow = document.createElement('div');
+        barsRow.className = 'chart-bars-row';
+
+        colors.forEach(function(color, ci) {
+          var bar = document.createElement('div');
+          var h = 30 + Math.random() * 100;
           bar.className = 'chart-bar';
-          bar.style.cssText = `background:${color}; height:${height}px; animation-delay:${(i * 0.08 + ci * 0.03)}s;`;
-          group.appendChild(bar);
+          bar.style.background = color;
+          bar.style.height = h + 'px';
+          bar.style.animationDelay = (i * 0.06 + ci * 0.03) + 's';
+          barsRow.appendChild(bar);
         });
 
-        const label = document.createElement('div');
-        label.style.cssText = 'font-size:11px; color:var(--text-dim); margin-top:4px;';
+        group.appendChild(barsRow);
+
+        var label = document.createElement('div');
+        label.className = 'chart-day-label';
         label.textContent = days[i % 7];
         group.appendChild(label);
 
@@ -833,50 +1735,117 @@
     generateChart('overview-chart', ['#f97316', '#8b5cf6', '#10b981'], 7);
     generateChart('analytics-chart', ['#10b981', '#ef4444', '#8b5cf6'], 14);
 
-    // Check Ted status
-    async function checkTedStatus() {
-      try {
-        const resp = await fetch('http://localhost:3777/api/status', { signal: AbortSignal.timeout(3000) });
-        document.getElementById('ted-dot').classList.remove('offline');
-        document.getElementById('sidebar-ted-badge').className = 'sidebar-status-badge badge-on';
-        document.getElementById('sidebar-ted-badge').textContent = 'פעיל';
-      } catch {
-        document.getElementById('ted-dot').classList.add('offline');
-        document.getElementById('sidebar-ted-badge').className = 'sidebar-status-badge badge-off';
-        document.getElementById('sidebar-ted-badge').textContent = 'לא פעיל';
+    // ========== STATUS CHECKS ==========
+    function checkServiceStatus(url, onOnline, onOffline) {
+      var controller = new AbortController();
+      var timeoutId = setTimeout(function() { controller.abort(); }, 4000);
+
+      fetch(url, { signal: controller.signal, mode: 'no-cors' })
+        .then(function() {
+          clearTimeout(timeoutId);
+          onOnline();
+        })
+        .catch(function() {
+          clearTimeout(timeoutId);
+          onOffline();
+        });
+    }
+
+    function updateDot(dotId, isOnline) {
+      var dot = document.getElementById(dotId);
+      if (dot) {
+        dot.classList.toggle('offline', !isOnline);
       }
     }
 
-    // Check ARIA status
-    async function checkAriaStatus() {
-      try {
-        const resp = await fetch('http://localhost:3888/api/status', { signal: AbortSignal.timeout(3000) });
-        document.getElementById('aria-dot').classList.remove('offline');
-        document.getElementById('sidebar-aria-badge').className = 'sidebar-status-badge badge-on';
-        document.getElementById('sidebar-aria-badge').textContent = 'פעילה';
-      } catch {
-        document.getElementById('aria-dot').classList.add('offline');
-        document.getElementById('sidebar-aria-badge').className = 'sidebar-status-badge badge-off';
-        document.getElementById('sidebar-aria-badge').textContent = 'לא פעילה';
-      }
+    function checkTedStatus() {
+      checkServiceStatus('http://localhost:3777/api/status',
+        function() {
+          updateDot('ted-dot', true);
+          updateDot('sidebar-ted-dot', true);
+          var badge = document.getElementById('sidebar-ted-badge');
+          if (badge) { badge.className = 'sidebar-status-badge badge-on'; badge.textContent = 'פעיל'; }
+        },
+        function() {
+          updateDot('ted-dot', false);
+          updateDot('sidebar-ted-dot', false);
+          var badge = document.getElementById('sidebar-ted-badge');
+          if (badge) { badge.className = 'sidebar-status-badge badge-off'; badge.textContent = 'לא פעיל'; }
+        }
+      );
     }
 
-    // Uptime counter
-    const startTime = Date.now();
+    function checkAriaStatus() {
+      checkServiceStatus('http://localhost:3888/api/status',
+        function() {
+          updateDot('aria-dot', true);
+          updateDot('sidebar-aria-dot', true);
+          var badge = document.getElementById('sidebar-aria-badge');
+          if (badge) { badge.className = 'sidebar-status-badge badge-on'; badge.textContent = 'פעילה'; }
+        },
+        function() {
+          updateDot('aria-dot', false);
+          updateDot('sidebar-aria-dot', false);
+          var badge = document.getElementById('sidebar-aria-badge');
+          if (badge) { badge.className = 'sidebar-status-badge badge-off'; badge.textContent = 'לא פעילה'; }
+        }
+      );
+    }
+
+    // ========== UPTIME COUNTER ==========
+    var startTime = Date.now();
     function updateUptime() {
-      const secs = Math.floor((Date.now() - startTime) / 1000);
-      const mins = Math.floor(secs / 60);
-      const hrs = Math.floor(mins / 60);
-      const display = hrs > 0 ? `${hrs}h ${mins%60}m` : `${mins}m ${secs%60}s`;
-      document.getElementById('uptime-display').textContent = `זמן פעילות: ${display}`;
+      var secs = Math.floor((Date.now() - startTime) / 1000);
+      var mins = Math.floor(secs / 60);
+      var hrs = Math.floor(mins / 60);
+      var display = hrs > 0 ? hrs + 'h ' + (mins % 60) + 'm' : mins + 'm ' + (secs % 60) + 's';
+      var el = document.getElementById('uptime-display');
+      if (el) el.textContent = 'זמן פעילות: ' + display;
     }
 
-    // Initial checks
+    // ========== TOAST NOTIFICATIONS ==========
+    window.showToast = function(message, icon) {
+      var container = document.getElementById('toast-container');
+      if (!container) return;
+      var toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = '<span>' + (icon || '🔔') + '</span> ' + message;
+      container.appendChild(toast);
+      setTimeout(function() {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 4200);
+    };
+
+    // ========== KEYBOARD NAVIGATION ==========
+    document.addEventListener('keydown', function(e) {
+      // Alt+1-5 for tab switching
+      if (e.altKey && e.key >= '1' && e.key <= '5') {
+        e.preventDefault();
+        var tabs = ['overview', 'ted', 'aria', 'leads', 'analytics'];
+        var idx = parseInt(e.key) - 1;
+        if (tabs[idx]) switchTab(tabs[idx]);
+      }
+    });
+
+    // ========== INIT ==========
+    // Run counter animations for visible panel
+    animateCounters(document.getElementById('panel-overview'));
+
+    // Initial status checks
     checkTedStatus();
     checkAriaStatus();
-    setInterval(checkTedStatus, 10000);
-    setInterval(checkAriaStatus, 10000);
+
+    // Periodic status checks (every 15 seconds)
+    setInterval(checkTedStatus, 15000);
+    setInterval(checkAriaStatus, 15000);
     setInterval(updateUptime, 1000);
+
+    // Show welcome toast on load
+    setTimeout(function() {
+      showToast('דשבורד נטען בהצלחה', '✅');
+    }, 800);
+
+  })();
   </script>
 </body>
 </html>
