@@ -14,53 +14,24 @@
       --bg: #ffffff;
       --bg-alt: #f8fafc;
       --bg-soft: #f1f5f9;
-      --bg-glass: rgba(255, 255, 255, 0.85);
-
       --primary: #6366f1;
       --primary-dark: #4f46e5;
-      --primary-light: #818cf8;
       --purple: #8b5cf6;
       --purple-dark: #7c3aed;
-      --blue: #3b82f6;
-      --indigo: #6366f1;
-      --pink: #ec4899;
-      --cyan: #06b6d4;
-      --green: #10b981;
-      --amber: #f59e0b;
       --orange: #f97316;
-
-      --gradient: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
-      --gradient-soft: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.08), rgba(168,85,247,0.05));
-      --gradient-hero: linear-gradient(135deg, rgba(99,102,241,0.06) 0%, rgba(236,72,153,0.04) 50%, rgba(59,130,246,0.06) 100%);
-      --gradient-btn: linear-gradient(135deg, #6366f1, #8b5cf6);
-      --gradient-btn-hover: linear-gradient(135deg, #4f46e5, #7c3aed);
-      --gradient-orange: linear-gradient(135deg, #f97316, #fb923c);
-      --gradient-purple: linear-gradient(135deg, #8b5cf6, #a855f7);
-
+      --orange-dark: #ea580c;
+      --green: #10b981;
       --text: #0f172a;
       --text-secondary: #475569;
       --text-muted: #94a3b8;
-
       --border: #e2e8f0;
-      --border-accent: rgba(99, 102, 241, 0.2);
-
-      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-      --shadow: 0 4px 16px rgba(0,0,0,0.06);
-      --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
-      --shadow-xl: 0 24px 64px rgba(0,0,0,0.1);
-      --shadow-glow: 0 8px 32px rgba(99,102,241,0.2);
-      --shadow-glow-lg: 0 16px 48px rgba(99,102,241,0.25);
-      --shadow-orange: 0 8px 32px rgba(249,115,22,0.25);
-      --shadow-purple: 0 8px 32px rgba(139,92,246,0.25);
-
       --radius: 16px;
       --radius-sm: 10px;
       --radius-lg: 24px;
       --radius-xl: 32px;
-      --radius-full: 9999px;
-
-      --transition: 200ms ease;
-      --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+      --shadow: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
+      --shadow-xl: 0 24px 64px rgba(0,0,0,0.1);
     }
 
     html { scroll-behavior: smooth; }
@@ -73,7 +44,7 @@
       overflow-x: hidden;
     }
 
-    /* ==================== ANIMATED TOP BAR ==================== */
+    /* ==================== TOP BAR ==================== */
     .top-bar {
       position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 200;
       background: linear-gradient(90deg, #f97316, #6366f1, #8b5cf6, #f97316);
@@ -86,1276 +57,875 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* ==================== BACKGROUND ==================== */
+    /* ==================== BACKGROUND MESH ==================== */
     .bg-mesh {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       pointer-events: none; z-index: 0;
       background:
-        radial-gradient(ellipse 600px 400px at 20% 10%, rgba(249,115,22,0.05), transparent),
-        radial-gradient(ellipse 500px 500px at 80% 20%, rgba(139,92,246,0.06), transparent),
-        radial-gradient(ellipse 400px 300px at 50% 80%, rgba(99,102,241,0.04), transparent);
+        radial-gradient(ellipse 600px 400px at 20% 10%, rgba(249,115,22,0.04), transparent),
+        radial-gradient(ellipse 500px 500px at 80% 20%, rgba(139,92,246,0.05), transparent),
+        radial-gradient(ellipse 400px 300px at 50% 80%, rgba(99,102,241,0.03), transparent);
     }
-    #particles-canvas {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; z-index: 0; opacity: 0.3;
-    }
+
+    /* ==================== SECTION BASE ==================== */
+    section { position: relative; z-index: 1; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
 
     /* ==================== NAVBAR ==================== */
     .navbar {
       position: fixed; top: 3px; left: 0; right: 0; z-index: 100;
-      padding: 12px 0;
-      background: rgba(255,255,255,0.88);
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(226,232,240,0.6);
+      padding: 14px 0;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(226,232,240,0.5);
+      transition: all 0.3s ease;
+    }
+    .navbar.scrolled {
+      padding: 8px 0;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
     }
     .nav-inner {
       max-width: 1200px; margin: 0 auto; padding: 0 32px;
       display: flex; align-items: center; justify-content: space-between;
     }
     .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-    .nav-logo-mark {
-      width: 42px; height: 42px; position: relative;
-      border-radius: 14px; overflow: hidden;
-      background: linear-gradient(135deg, #f97316 0%, #8b5cf6 50%, #6366f1 100%);
-      box-shadow: 0 4px 20px rgba(139,92,246,0.3);
+    .nav-logo-icon {
+      width: 42px; height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f97316, #8b5cf6);
       display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 900; color: white;
+      box-shadow: 0 4px 16px rgba(139,92,246,0.3);
     }
-    .nav-logo-mark::before {
-      content: ''; position: absolute; inset: 2px;
-      border-radius: 12px; background: white;
-    }
-    .nav-logo-mark svg { position: relative; z-index: 1; }
     .nav-logo-text {
       font-size: 22px; font-weight: 900; letter-spacing: -0.5px;
       background: linear-gradient(135deg, #8b5cf6, #f97316);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
     .nav-link {
       color: var(--text-secondary); text-decoration: none; font-size: 15px; font-weight: 500;
-      transition: color var(--transition);
+      transition: color 0.2s; position: relative;
     }
     .nav-link:hover { color: var(--primary); }
     .nav-cta {
-      background: var(--gradient-btn); color: #fff; padding: 10px 28px; border-radius: var(--radius-sm);
-      font-weight: 600; font-size: 14px; text-decoration: none; transition: all var(--transition);
-      border: none; cursor: pointer; box-shadow: var(--shadow-glow);
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #fff; padding: 10px 28px; border-radius: var(--radius-sm);
+      font-weight: 600; font-size: 14px; text-decoration: none;
+      border: none; cursor: pointer; transition: all 0.2s;
+      box-shadow: 0 4px 16px rgba(99,102,241,0.3);
+      font-family: inherit;
     }
-    .nav-cta:hover { transform: translateY(-1px); box-shadow: var(--shadow-glow-lg); }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(99,102,241,0.4); }
+    .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+    .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--text); margin: 5px 0; transition: 0.3s; border-radius: 2px; }
 
     /* ==================== HERO ==================== */
     .hero {
       position: relative; z-index: 1;
       min-height: 100vh; display: flex; align-items: center;
-      padding: 140px 32px 80px; overflow: hidden;
+      padding: 120px 0 80px;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -200px; right: -300px;
+      width: 800px; height: 800px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,92,246,0.08), transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: -200px; left: -200px;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(249,115,22,0.06), transparent 70%);
+      pointer-events: none;
     }
     .hero-inner {
-      max-width: 1200px; margin: 0 auto; width: 100%;
-      text-align: center;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+      max-width: 1200px; margin: 0 auto; padding: 0 32px;
     }
+    .hero-content { position: relative; z-index: 2; }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 8px;
-      background: var(--gradient-soft); border: 1px solid var(--border-accent);
-      padding: 8px 24px; border-radius: var(--radius-full);
-      font-size: 14px; font-weight: 600; color: var(--primary); margin-bottom: 28px;
-      animation: fadeInDown 0.7s ease;
+      background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.08));
+      border: 1px solid rgba(99,102,241,0.15);
+      padding: 6px 16px; border-radius: 999px;
+      font-size: 13px; font-weight: 600; color: var(--primary);
+      margin-bottom: 24px;
     }
-    .hero-badge-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--green); animation: pulse-dot 2s infinite;
+    .hero-badge .pulse {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--green);
+      animation: pulse 2s infinite;
     }
-    @keyframes pulse-dot { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
-
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.3); }
+    }
     .hero h1 {
-      font-size: clamp(38px, 5vw, 64px); font-weight: 900;
-      line-height: 1.15; margin-bottom: 24px; letter-spacing: -1.5px;
-      animation: fadeInUp 0.7s ease 0.1s both;
+      font-size: 52px; font-weight: 900; line-height: 1.15;
+      letter-spacing: -1px; margin-bottom: 20px;
     }
-    .gradient-word {
-      background: var(--gradient); -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent; background-clip: text;
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6, #f97316);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .orange-word {
-      background: var(--gradient-orange); -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent; background-clip: text;
+    .hero-desc {
+      font-size: 18px; color: var(--text-secondary); line-height: 1.8;
+      margin-bottom: 36px; max-width: 500px;
     }
-    .purple-word {
-      background: var(--gradient-purple); -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .hero-sub {
-      font-size: 20px; color: var(--text-secondary); line-height: 1.8;
-      margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto;
-      animation: fadeInUp 0.7s ease 0.2s both;
-    }
-
-    /* Characters side by side */
-    .hero-characters {
-      display: flex; justify-content: center; align-items: flex-end; gap: 40px;
-      margin-bottom: 48px;
-      animation: fadeInUp 0.8s ease 0.3s both;
-    }
-    .hero-char {
-      position: relative; text-align: center;
-    }
-    .hero-char-img-wrap {
-      width: 200px; height: 200px; border-radius: 50%;
-      overflow: hidden; margin: 0 auto 16px;
-      border: 4px solid; position: relative;
-      transition: all 0.4s ease;
-    }
-    .hero-char-img-wrap:hover { transform: scale(1.05); }
-    .hero-char.ted .hero-char-img-wrap { border-color: var(--orange); box-shadow: var(--shadow-orange); }
-    .hero-char.aria .hero-char-img-wrap { border-color: var(--purple); box-shadow: var(--shadow-purple); }
-    .hero-char-img-wrap img {
-      width: 100%; height: 100%; object-fit: cover;
-    }
-    .hero-char-name {
-      font-size: 22px; font-weight: 800; margin-bottom: 4px;
-    }
-    .hero-char.ted .hero-char-name { color: var(--orange); }
-    .hero-char.aria .hero-char-name { color: var(--purple); }
-    .hero-char-role {
-      font-size: 14px; color: var(--text-muted); font-weight: 500;
-    }
-    .hero-char-badge {
-      display: inline-block; padding: 4px 14px; border-radius: var(--radius-full);
-      font-size: 12px; font-weight: 700; margin-top: 8px;
-    }
-    .hero-char.ted .hero-char-badge { background: rgba(249,115,22,0.1); color: var(--orange); }
-    .hero-char.aria .hero-char-badge { background: rgba(139,92,246,0.1); color: var(--purple); }
-
-    .hero-plus {
-      font-size: 40px; font-weight: 300; color: var(--text-muted);
-      margin-bottom: 60px; animation: pulse-dot 3s infinite;
-    }
-
-    .hero-buttons {
-      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 48px;
-      animation: fadeInUp 0.7s ease 0.4s both;
-    }
+    .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
     .btn-primary {
-      background: var(--gradient-btn); color: #fff; padding: 16px 40px; border-radius: 14px;
-      font-size: 17px; font-weight: 700; text-decoration: none; transition: all 0.3s;
-      border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 10px;
-      font-family: inherit; box-shadow: var(--shadow-glow);
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #fff; padding: 14px 36px; border-radius: 12px;
+      font-weight: 700; font-size: 16px; text-decoration: none;
+      border: none; cursor: pointer; transition: all 0.25s;
+      box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+      font-family: inherit; display: inline-flex; align-items: center; gap: 8px;
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-glow-lg); }
-    .btn-outline {
-      background: transparent; color: var(--text); padding: 16px 40px; border-radius: 14px;
-      font-size: 17px; font-weight: 600; text-decoration: none; transition: all 0.3s;
-      border: 2px solid var(--border); cursor: pointer; display: inline-flex;
-      align-items: center; gap: 10px; font-family: inherit;
-    }
-    .btn-outline:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
-
-    .hero-trust {
-      display: flex; gap: 40px; justify-content: center;
-      animation: fadeInUp 0.7s ease 0.5s both;
-    }
-    .trust-item { display: flex; align-items: center; gap: 8px; }
-    .trust-num { font-size: 24px; font-weight: 800; color: var(--primary); }
-    .trust-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
-
-    /* ==================== TRUST BAR ==================== */
-    .trust-bar {
-      position: relative; z-index: 1; padding: 40px 32px;
-      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-      background: var(--bg-alt);
-    }
-    .trust-bar-inner { max-width: 1200px; margin: 0 auto; text-align: center; }
-    .trust-bar-label {
-      font-size: 12px; color: var(--text-muted); font-weight: 600;
-      text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;
-    }
-    .trust-logos { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; align-items: center; }
-    .trust-logo {
-      display: flex; align-items: center; gap: 8px;
-      padding: 8px 20px; border-radius: var(--radius-full);
-      background: var(--bg); border: 1px solid var(--border);
-      font-size: 14px; font-weight: 600; color: var(--text-secondary); transition: all var(--transition);
-    }
-    .trust-logo:hover { border-color: var(--primary); color: var(--primary); box-shadow: var(--shadow); }
-    .trust-logo svg { width: 18px; height: 18px; }
-
-    /* ==================== SECTIONS ==================== */
-    section { position: relative; z-index: 1; padding: 100px 32px; }
-    .section-inner { max-width: 1200px; margin: 0 auto; }
-    .section-badge {
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(99,102,241,0.4); }
+    .btn-secondary {
+      background: white; color: var(--text);
+      padding: 14px 36px; border-radius: 12px;
+      font-weight: 600; font-size: 16px; text-decoration: none;
+      border: 1px solid var(--border); transition: all 0.25s;
       display: inline-flex; align-items: center; gap: 8px;
-      background: var(--gradient-soft); border: 1px solid var(--border-accent);
-      padding: 6px 18px; border-radius: var(--radius-full);
-      font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 16px;
+      font-family: inherit; cursor: pointer;
+    }
+    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow); }
+
+    .hero-visual {
+      position: relative; display: flex; justify-content: center; align-items: center;
+    }
+    .hero-img-wrapper {
+      position: relative; width: 100%; max-width: 520px;
+    }
+    .hero-img-wrapper img {
+      width: 100%; height: auto; border-radius: var(--radius-xl);
+      position: relative; z-index: 2;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.12));
+    }
+    .hero-img-wrapper::before {
+      content: ''; position: absolute; inset: -20px;
+      border-radius: 40px;
+      background: linear-gradient(135deg, rgba(249,115,22,0.15), rgba(139,92,246,0.15));
+      filter: blur(30px); z-index: 0;
+    }
+    .hero-float-card {
+      position: absolute; z-index: 10;
+      background: white; border-radius: 14px; padding: 12px 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      border: 1px solid rgba(226,232,240,0.6);
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 600;
+      animation: floatCard 4s ease-in-out infinite;
+    }
+    .hero-float-card:nth-child(2) { animation-delay: -1.5s; }
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .float-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .float-card-1 { top: 20%; left: -30px; }
+    .float-card-1 .float-icon { background: rgba(16,185,129,0.1); }
+    .float-card-2 { bottom: 20%; right: -30px; }
+    .float-card-2 .float-icon { background: rgba(99,102,241,0.1); }
+
+    /* Trust stats */
+    .hero-stats {
+      display: flex; gap: 40px; margin-top: 48px;
+      padding-top: 32px; border-top: 1px solid var(--border);
+    }
+    .hero-stat-value { font-size: 28px; font-weight: 900; color: var(--primary); }
+    .hero-stat-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+    /* ==================== SECTION HEADER ==================== */
+    .section-header {
+      text-align: center; margin-bottom: 60px;
+    }
+    .section-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.08));
+      border: 1px solid rgba(99,102,241,0.12);
+      padding: 6px 18px; border-radius: 999px;
+      font-size: 13px; font-weight: 600; color: var(--primary);
+      margin-bottom: 16px;
     }
     .section-title {
-      font-size: clamp(32px, 4vw, 50px); font-weight: 800;
-      line-height: 1.2; margin-bottom: 20px; letter-spacing: -1px;
+      font-size: 40px; font-weight: 900; line-height: 1.2;
+      letter-spacing: -0.5px; margin-bottom: 16px;
     }
-    .section-desc { font-size: 18px; color: var(--text-secondary); max-width: 600px; line-height: 1.8; }
-    .section-header { margin-bottom: 64px; }
-    .section-header.center { text-align: center; }
-    .section-header.center .section-desc { margin: 0 auto; }
+    .section-subtitle {
+      font-size: 18px; color: var(--text-secondary); max-width: 600px; margin: 0 auto;
+    }
 
-    /* ==================== MEET THE TEAM ==================== */
-    .meet-section { background: var(--bg-alt); }
-    .meet-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-    .meet-card {
-      border-radius: var(--radius-lg); padding: 48px 36px;
-      transition: all var(--transition-slow); position: relative; overflow: hidden;
-      text-align: center;
+    /* ==================== PRODUCTS ==================== */
+    .products { padding: 100px 0; background: var(--bg-alt); }
+    .products-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
     }
-    .meet-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    .product-card {
+      border-radius: var(--radius-xl); padding: 48px 40px;
+      position: relative; overflow: hidden;
+      transition: all 0.35s ease;
+      border: 1px solid transparent;
     }
-    .meet-card.ted-card {
-      background: linear-gradient(180deg, rgba(249,115,22,0.04), var(--bg));
-      border: 1px solid rgba(249,115,22,0.2);
+    .product-card:hover { transform: translateY(-4px); }
+    .product-card.ted {
+      background: linear-gradient(135deg, #fff7ed, #fff);
+      border-color: rgba(249,115,22,0.15);
     }
-    .meet-card.ted-card::before { background: var(--gradient-orange); }
-    .meet-card.ted-card:hover { box-shadow: 0 16px 48px rgba(249,115,22,0.12); transform: translateY(-6px); }
-    .meet-card.aria-card {
-      background: linear-gradient(180deg, rgba(139,92,246,0.04), var(--bg));
-      border: 1px solid rgba(139,92,246,0.2);
+    .product-card.ted:hover { box-shadow: 0 16px 48px rgba(249,115,22,0.15); }
+    .product-card.aria {
+      background: linear-gradient(135deg, #f5f3ff, #fff);
+      border-color: rgba(139,92,246,0.15);
     }
-    .meet-card.aria-card::before { background: var(--gradient-purple); }
-    .meet-card.aria-card:hover { box-shadow: 0 16px 48px rgba(139,92,246,0.12); transform: translateY(-6px); }
+    .product-card.aria:hover { box-shadow: 0 16px 48px rgba(139,92,246,0.15); }
+    .product-card::before {
+      content: ''; position: absolute; top: -50%; right: -50%;
+      width: 300px; height: 300px; border-radius: 50%;
+      opacity: 0.06; pointer-events: none;
+    }
+    .product-card.ted::before { background: var(--orange); }
+    .product-card.aria::before { background: var(--purple); }
 
-    .meet-avatar {
-      width: 140px; height: 140px; border-radius: 50%; margin: 0 auto 24px;
-      overflow: hidden; border: 3px solid;
+    .product-avatar {
+      width: 80px; height: 80px; border-radius: 20px; overflow: hidden;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     }
-    .meet-card.ted-card .meet-avatar { border-color: var(--orange); box-shadow: var(--shadow-orange); }
-    .meet-card.aria-card .meet-avatar { border-color: var(--purple); box-shadow: var(--shadow-purple); }
-    .meet-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .meet-card h3 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
-    .meet-card.ted-card h3 { color: var(--orange); }
-    .meet-card.aria-card h3 { color: var(--purple); }
-    .meet-subtitle { font-size: 16px; color: var(--text-secondary); margin-bottom: 28px; }
-    .meet-features { list-style: none; text-align: right; }
-    .meet-features li {
-      font-size: 15px; color: var(--text-secondary); padding: 10px 0;
-      border-bottom: 1px solid var(--border);
+    .product-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .product-name {
+      font-size: 28px; font-weight: 900; margin-bottom: 8px;
+    }
+    .product-name.ted-color { color: var(--orange); }
+    .product-name.aria-color { color: var(--purple); }
+    .product-role {
+      font-size: 15px; color: var(--text-muted); margin-bottom: 24px; font-weight: 500;
+    }
+    .product-features { list-style: none; margin-bottom: 32px; }
+    .product-features li {
+      padding: 8px 0; font-size: 15px; color: var(--text-secondary);
       display: flex; align-items: center; gap: 10px;
     }
-    .meet-features li:last-child { border: none; }
-    .meet-features li svg { width: 18px; height: 18px; flex-shrink: 0; }
-    .meet-card.ted-card .meet-features li svg { color: var(--orange); }
-    .meet-card.aria-card .meet-features li svg { color: var(--purple); }
-
-    /* ==================== HOW THEY WORK TOGETHER ==================== */
-    .together-section { background: var(--bg); }
-    .together-flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 20px; align-items: center; }
-    .together-step {
-      text-align: center; padding: 32px 24px; border-radius: var(--radius-lg);
-      background: var(--bg); border: 1px solid var(--border);
-      transition: all var(--transition-slow);
-    }
-    .together-step:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
-    .together-step-icon {
-      width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 20px;
+    .product-features li::before {
+      content: '✓'; font-weight: 800; font-size: 14px;
+      width: 24px; height: 24px; border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
     }
-    .together-step.step-ted .together-step-icon {
+    .product-card.ted .product-features li::before {
       background: rgba(249,115,22,0.1); color: var(--orange);
     }
-    .together-step.step-aria .together-step-icon {
+    .product-card.aria .product-features li::before {
       background: rgba(139,92,246,0.1); color: var(--purple);
     }
-    .together-step.step-both .together-step-icon {
-      background: var(--gradient-soft); color: var(--primary);
+    .product-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px; border-radius: 12px; font-weight: 700;
+      font-size: 15px; text-decoration: none; transition: all 0.25s;
+      font-family: inherit; border: none; cursor: pointer;
     }
-    .together-step h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-    .together-step p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
-    .together-arrow {
-      font-size: 28px; color: var(--text-muted); display: flex; align-items: center;
+    .product-btn.ted-btn {
+      background: linear-gradient(135deg, #f97316, #fb923c);
+      color: white; box-shadow: 0 4px 16px rgba(249,115,22,0.3);
     }
-
-    /* ==================== FEATURES ==================== */
-    .features-section { background: var(--bg-alt); }
-    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    .feature-card {
-      background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 36px; transition: all var(--transition-slow);
+    .product-btn.ted-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(249,115,22,0.4); }
+    .product-btn.aria-btn {
+      background: linear-gradient(135deg, #8b5cf6, #a855f7);
+      color: white; box-shadow: 0 4px 16px rgba(139,92,246,0.3);
     }
-    .feature-card:hover {
-      transform: translateY(-6px); box-shadow: var(--shadow-lg);
-      border-color: var(--border-accent);
-    }
-    .feature-icon {
-      width: 56px; height: 56px; border-radius: 16px;
-      display: flex; align-items: center; justify-content: center; margin-bottom: 22px;
-    }
-    .feature-card h3 { font-size: 19px; font-weight: 700; margin-bottom: 10px; }
-    .feature-card p { font-size: 15px; color: var(--text-secondary); line-height: 1.7; }
-    .feature-badge {
-      display: inline-block; margin-top: 14px; padding: 3px 10px;
-      border-radius: var(--radius-full); font-size: 11px; font-weight: 700;
-    }
-    .feature-badge.ted { background: rgba(249,115,22,0.1); color: var(--orange); }
-    .feature-badge.aria { background: rgba(139,92,246,0.1); color: var(--purple); }
+    .product-btn.aria-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(139,92,246,0.4); }
 
     /* ==================== 3D SHOWCASE ==================== */
-    .showcase-section { background: var(--bg); overflow: hidden; }
-    .showcase-container {
-      max-width: 1000px; margin: 0 auto; position: relative;
+    .showcase-3d {
+      padding: 100px 0;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 100%);
+    }
+    .showcase-frame {
+      width: 100%; max-width: 900px; height: 500px; margin: 0 auto;
       border-radius: var(--radius-xl); overflow: hidden;
-      border: 1px solid var(--border); box-shadow: var(--shadow-xl);
-      background: var(--bg);
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--border);
+      background: #f8fafc;
     }
-    .showcase-container spline-viewer { width: 100%; height: 500px; display: block; }
-    .showcase-overlay {
-      position: absolute; bottom: 0; left: 0; right: 0; padding: 32px;
-      background: linear-gradient(180deg, transparent, rgba(255,255,255,0.95));
-      text-align: center;
-    }
-    .showcase-overlay h3 { font-size: 22px; font-weight: 800; }
-    .showcase-overlay p { font-size: 14px; color: var(--text-secondary); }
-    .showcase-hint {
-      display: inline-flex; align-items: center; gap: 8px; margin-top: 12px;
-      padding: 6px 18px; border-radius: var(--radius-full);
-      background: var(--gradient-soft); border: 1px solid var(--border-accent);
-      font-size: 12px; color: var(--primary); font-weight: 600;
-    }
+    .showcase-frame spline-viewer { width: 100%; height: 100%; display: block; }
 
-    /* ==================== TESTIMONIALS ==================== */
-    .testimonials-section { background: var(--bg-alt); }
-    .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    .testimonial-card {
-      background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 32px; transition: all var(--transition-slow);
+    /* ==================== FEATURES GRID ==================== */
+    .features { padding: 100px 0; }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
     }
-    .testimonial-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
-    .testimonial-stars { display: flex; gap: 2px; margin-bottom: 16px; }
-    .testimonial-stars svg { width: 18px; height: 18px; fill: var(--amber); }
-    .testimonial-text {
-      font-size: 16px; color: var(--text); line-height: 1.8;
-      margin-bottom: 24px; font-style: italic;
+    .feature-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      transition: all 0.3s ease;
+      position: relative; overflow: hidden;
     }
-    .testimonial-author { display: flex; align-items: center; gap: 12px; }
-    .testimonial-avatar {
-      width: 44px; height: 44px; border-radius: 50%;
+    .feature-card:hover {
+      border-color: rgba(99,102,241,0.2);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .feature-icon {
+      width: 52px; height: 52px; border-radius: 14px;
       display: flex; align-items: center; justify-content: center;
-      color: #fff; font-weight: 700; font-size: 16px;
+      font-size: 24px; margin-bottom: 20px;
+      background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.08));
     }
-    .testimonial-name { font-size: 15px; font-weight: 700; }
-    .testimonial-role { font-size: 13px; color: var(--text-muted); }
+    .feature-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
+    .feature-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+    /* ==================== DASHBOARD PREVIEW ==================== */
+    .dashboard-preview {
+      padding: 100px 0;
+      background: var(--bg-alt);
+    }
+    .dashboard-mockup {
+      max-width: 1000px; margin: 0 auto;
+      border-radius: var(--radius-xl); overflow: hidden;
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--border);
+      background: #1a1425;
+    }
+    .mockup-bar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 14px 20px;
+      background: #0f0b1a;
+      border-bottom: 1px solid rgba(139,92,246,0.15);
+    }
+    .mockup-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+    }
+    .mockup-dot.r { background: #ef4444; }
+    .mockup-dot.y { background: #f59e0b; }
+    .mockup-dot.g { background: #10b981; }
+    .mockup-url {
+      flex: 1; text-align: center;
+      font-size: 12px; color: rgba(255,255,255,0.4);
+      font-family: 'Inter', monospace;
+    }
+    .mockup-body {
+      padding: 32px;
+      min-height: 400px;
+      display: grid; grid-template-columns: 200px 1fr; gap: 24px;
+    }
+    .mockup-sidebar {
+      border-left: 1px solid rgba(139,92,246,0.15);
+      padding-left: 20px;
+    }
+    .mockup-nav-item {
+      padding: 10px 16px; border-radius: 10px; margin-bottom: 6px;
+      font-size: 13px; color: rgba(255,255,255,0.5);
+      display: flex; align-items: center; gap: 10px;
+      cursor: default;
+    }
+    .mockup-nav-item.active {
+      background: rgba(139,92,246,0.15); color: #a78bfa; font-weight: 600;
+    }
+    .mockup-content {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    .mockup-stat {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(139,92,246,0.1);
+      border-radius: 14px; padding: 20px;
+    }
+    .mockup-stat-label { font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
+    .mockup-stat-value { font-size: 24px; font-weight: 800; color: white; }
+    .mockup-stat-change {
+      font-size: 12px; color: #10b981; margin-top: 4px;
+      display: flex; align-items: center; gap: 4px;
+    }
 
     /* ==================== PRICING ==================== */
-    .pricing-section { background: var(--bg); }
-    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .pricing { padding: 100px 0; }
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      max-width: 1000px; margin: 0 auto;
+    }
     .price-card {
-      background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg);
-      padding: 40px 32px; transition: all var(--transition-slow); position: relative;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 40px 32px;
+      text-align: center;
+      transition: all 0.3s;
+      position: relative;
     }
-    .price-card:hover { box-shadow: var(--shadow-lg); }
-    .price-card.featured {
-      border-color: var(--primary); box-shadow: var(--shadow-glow); transform: scale(1.02);
+    .price-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .price-card.popular {
+      border-color: var(--primary);
+      box-shadow: 0 8px 32px rgba(99,102,241,0.15);
     }
-    .price-card.featured:hover { transform: scale(1.04); }
-    .price-popular {
-      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-      background: var(--gradient-btn); color: #fff; padding: 4px 20px;
-      border-radius: var(--radius-full); font-size: 12px; font-weight: 700;
-      box-shadow: var(--shadow-glow);
-    }
-    .price-name { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-    .price-amount { font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 4px; }
-    .price-amount .currency { font-size: 22px; font-weight: 600; vertical-align: super; }
-    .price-period { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
-    .price-includes {
-      display: flex; gap: 8px; margin-bottom: 20px;
-    }
-    .price-char-badge {
-      padding: 3px 12px; border-radius: var(--radius-full);
+    .price-card.popular::before {
+      content: 'הכי פופולרי';
+      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white; padding: 4px 20px; border-radius: 999px;
       font-size: 12px; font-weight: 700;
     }
-    .price-char-badge.ted { background: rgba(249,115,22,0.1); color: var(--orange); }
-    .price-char-badge.aria { background: rgba(139,92,246,0.1); color: var(--purple); }
-    .price-features { list-style: none; margin-bottom: 32px; }
+    .price-name { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+    .price-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+    .price-amount {
+      font-size: 48px; font-weight: 900; margin-bottom: 4px;
+    }
+    .price-amount span { font-size: 18px; font-weight: 500; color: var(--text-muted); }
+    .price-period { font-size: 14px; color: var(--text-muted); margin-bottom: 32px; }
+    .price-features { list-style: none; margin-bottom: 32px; text-align: right; }
     .price-features li {
-      font-size: 14px; color: var(--text-secondary); padding: 8px 0;
-      border-bottom: 1px solid var(--border);
+      padding: 8px 0; font-size: 14px; color: var(--text-secondary);
       display: flex; align-items: center; gap: 10px;
     }
-    .price-features li:last-child { border: none; }
-    .price-features li svg { width: 16px; height: 16px; color: var(--green); flex-shrink: 0; }
-    .price-btn {
-      display: block; width: 100%; text-align: center; padding: 14px;
-      border-radius: 12px; font-size: 16px; font-weight: 700;
-      text-decoration: none; transition: all 0.3s; border: none; cursor: pointer; font-family: inherit;
+    .price-features li::before {
+      content: '✓'; color: var(--green); font-weight: 800; font-size: 14px;
     }
-    .price-btn-outline { background: transparent; color: var(--text); border: 2px solid var(--border); }
-    .price-btn-outline:hover { border-color: var(--primary); color: var(--primary); }
-    .price-btn-gradient { background: var(--gradient-btn); color: #fff; box-shadow: var(--shadow-glow); }
-    .price-btn-gradient:hover { box-shadow: var(--shadow-glow-lg); transform: translateY(-2px); }
+    .price-btn {
+      width: 100%; padding: 14px; border-radius: 12px;
+      font-weight: 700; font-size: 15px; cursor: pointer;
+      transition: all 0.25s; font-family: inherit;
+      text-decoration: none; display: block; text-align: center;
+    }
+    .price-btn.primary {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white; border: none;
+      box-shadow: 0 4px 16px rgba(99,102,241,0.3);
+    }
+    .price-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(99,102,241,0.4); }
+    .price-btn.outline {
+      background: white; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .price-btn.outline:hover { border-color: var(--primary); color: var(--primary); }
 
     /* ==================== CTA ==================== */
     .cta-section {
-      text-align: center; padding: 120px 32px; position: relative; overflow: hidden;
-      background: var(--bg-alt);
+      padding: 100px 0;
+      background: linear-gradient(135deg, #f8fafc 0%, #ede9fe 50%, #fff7ed 100%);
+      position: relative; overflow: hidden;
     }
-    .cta-3d-bg {
-      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      opacity: 0.12; pointer-events: none; z-index: 0;
+    .cta-section::before {
+      content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 400px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,92,246,0.08), transparent);
+      pointer-events: none;
     }
-    .cta-3d-bg spline-viewer { width: 100%; height: 100%; }
-    .cta-box {
-      max-width: 750px; margin: 0 auto; position: relative; z-index: 1;
-      background: var(--bg-glass); backdrop-filter: blur(20px);
-      border: 1px solid var(--border); border-radius: var(--radius-xl);
-      padding: 64px 48px; box-shadow: var(--shadow-xl);
+    .cta-content {
+      text-align: center; position: relative; z-index: 1;
     }
-    .cta-chars {
-      display: flex; justify-content: center; gap: 16px; margin-bottom: 28px;
+    .cta-characters {
+      display: flex; justify-content: center; gap: 20px; margin-bottom: 40px;
     }
-    .cta-char-img {
-      width: 64px; height: 64px; border-radius: 50%; overflow: hidden;
-      border: 3px solid;
+    .cta-char {
+      width: 80px; height: 80px; border-radius: 20px; overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      transition: transform 0.3s;
     }
-    .cta-char-img.ted { border-color: var(--orange); }
-    .cta-char-img.aria { border-color: var(--purple); }
-    .cta-char-img img { width: 100%; height: 100%; object-fit: cover; }
-    .cta-box h2 { font-size: 38px; font-weight: 800; margin-bottom: 16px; letter-spacing: -1px; }
-    .cta-box p { font-size: 18px; color: var(--text-secondary); margin-bottom: 36px; line-height: 1.8; }
+    .cta-char:hover { transform: scale(1.1) rotate(-3deg); }
+    .cta-char img { width: 100%; height: 100%; object-fit: cover; }
+    .cta-content h2 {
+      font-size: 40px; font-weight: 900; margin-bottom: 16px;
+    }
+    .cta-content p {
+      font-size: 18px; color: var(--text-secondary); margin-bottom: 36px;
+      max-width: 500px; margin-left: auto; margin-right: auto;
+    }
 
     /* ==================== FOOTER ==================== */
     .footer {
-      position: relative; z-index: 1;
-      border-top: 1px solid var(--border); padding: 48px 32px;
-      background: var(--bg);
+      padding: 60px 0 30px;
+      background: #0f0b1a;
+      color: rgba(255,255,255,0.6);
     }
     .footer-inner {
-      max-width: 1200px; margin: 0 auto;
-      display: flex; justify-content: space-between; align-items: center;
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+      margin-bottom: 48px;
     }
-    .footer-brand { display: flex; align-items: center; gap: 10px; }
-    .footer-logos { display: flex; gap: 4px; }
-    .footer-logo-sm {
-      width: 24px; height: 24px; border-radius: 6px;
+    .footer-brand { }
+    .footer-logo {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+    }
+    .footer-logo-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, #f97316, #8b5cf6);
       display: flex; align-items: center; justify-content: center;
-      font-size: 10px; font-weight: 800; color: #fff;
+      font-size: 14px; font-weight: 900; color: white;
     }
-    .footer-text { font-size: 14px; color: var(--text-muted); }
-    .footer-links { display: flex; gap: 28px; }
-    .footer-link { color: var(--text-muted); text-decoration: none; font-size: 14px; transition: color 0.2s; }
-    .footer-link:hover { color: var(--primary); }
-
-    /* ==================== DEMO SECTION ==================== */
-    .demo-section { background: var(--bg); overflow: hidden; }
-    .demo-tabs { display: flex; gap: 12px; justify-content: center; margin-bottom: 48px; }
-    .demo-tab {
-      padding: 12px 28px; border-radius: var(--radius-full); font-size: 15px; font-weight: 600;
-      border: 2px solid var(--border); background: var(--bg); color: var(--text-secondary);
-      cursor: pointer; transition: all 0.3s; font-family: inherit;
+    .footer-logo-text {
+      font-size: 20px; font-weight: 900;
+      background: linear-gradient(135deg, #8b5cf6, #f97316);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .demo-tab.active, .demo-tab:hover { border-color: var(--primary); color: var(--primary); background: var(--gradient-soft); }
-    .demo-tab.active.ted, .demo-tab:hover.ted { border-color: var(--orange); color: var(--orange); background: rgba(249,115,22,0.06); }
-    .demo-tab.active.aria, .demo-tab:hover.aria { border-color: var(--purple); color: var(--purple); background: rgba(139,92,246,0.06); }
-    .demo-panel { display: none; }
-    .demo-panel.active { display: block; }
-    .demo-browser {
-      max-width: 1000px; margin: 0 auto; border-radius: var(--radius-lg); overflow: hidden;
-      border: 1px solid var(--border); box-shadow: var(--shadow-xl);
-      background: var(--bg);
+    .footer-desc { font-size: 14px; line-height: 1.8; max-width: 300px; }
+    .footer-col h4 {
+      color: white; font-size: 14px; font-weight: 700;
+      margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px;
     }
-    .demo-browser-bar {
-      display: flex; align-items: center; gap: 8px; padding: 12px 20px;
-      background: var(--bg-alt); border-bottom: 1px solid var(--border);
+    .footer-col a {
+      display: block; color: rgba(255,255,255,0.5); text-decoration: none;
+      font-size: 14px; padding: 4px 0; transition: color 0.2s;
     }
-    .demo-dots { display: flex; gap: 6px; }
-    .demo-dot { width: 10px; height: 10px; border-radius: 50%; }
-    .demo-dot:nth-child(1) { background: #ef4444; }
-    .demo-dot:nth-child(2) { background: #f59e0b; }
-    .demo-dot:nth-child(3) { background: #10b981; }
-    .demo-url {
-      flex: 1; margin: 0 12px; padding: 6px 16px; border-radius: 8px;
-      background: var(--bg); border: 1px solid var(--border); font-size: 13px;
-      color: var(--text-muted); font-family: 'Inter', monospace;
+    .footer-col a:hover { color: #a78bfa; }
+    .footer-bottom {
+      padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px;
     }
-    .demo-content {
-      position: relative; width: 100%; height: 500px; overflow: hidden;
-      background: var(--bg-alt);
+    .footer-status {
+      display: flex; gap: 16px;
     }
-    .demo-content spline-viewer { width: 100%; height: 100%; display: block; }
-    .demo-content-overlay {
-      position: absolute; inset: 0; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; text-align: center;
-      background: linear-gradient(180deg, transparent 30%, rgba(255,255,255,0.9));
-      padding: 32px;
+    .footer-status-item {
+      display: flex; align-items: center; gap: 6px; font-size: 12px;
     }
-    .demo-content-overlay h3 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
-    .demo-content-overlay p { font-size: 15px; color: var(--text-secondary); margin-bottom: 20px; max-width: 500px; }
-    .demo-features-row {
-      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 24px;
-    }
-    .demo-feature-chip {
-      padding: 8px 18px; border-radius: var(--radius-full);
-      background: var(--bg); border: 1px solid var(--border);
-      font-size: 13px; font-weight: 600; color: var(--text-secondary);
-      display: flex; align-items: center; gap: 6px;
-    }
-    .demo-cta-row { display: flex; gap: 12px; justify-content: center; margin-top: 32px; }
-    .btn-ted {
-      background: var(--gradient-orange); color: #fff; padding: 12px 32px; border-radius: 12px;
-      font-size: 15px; font-weight: 700; text-decoration: none; transition: all 0.3s;
-      border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
-      font-family: inherit; box-shadow: var(--shadow-orange);
-    }
-    .btn-ted:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(249,115,22,0.3); }
-    .btn-aria {
-      background: var(--gradient-purple); color: #fff; padding: 12px 32px; border-radius: 12px;
-      font-size: 15px; font-weight: 700; text-decoration: none; transition: all 0.3s;
-      border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
-      font-family: inherit; box-shadow: var(--shadow-purple);
-    }
-    .btn-aria:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(139,92,246,0.3); }
-
-    /* ==================== ARIA STORY ==================== */
-    .story-section { background: var(--bg-alt); }
-    .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
-    .story-visual { position: relative; }
-    .story-3d-wrap {
-      border-radius: var(--radius-xl); overflow: hidden;
-      border: 1px solid rgba(139,92,246,0.2);
-      box-shadow: 0 24px 80px rgba(139,92,246,0.15);
-      background: linear-gradient(135deg, rgba(139,92,246,0.05), rgba(99,102,241,0.05));
-    }
-    .story-3d-wrap spline-viewer { width: 100%; height: 400px; display: block; }
-    .story-text .section-badge { margin-bottom: 20px; }
-    .story-text h2 { font-size: 40px; font-weight: 900; line-height: 1.2; margin-bottom: 20px; letter-spacing: -1px; }
-    .story-text p { font-size: 17px; color: var(--text-secondary); line-height: 1.9; margin-bottom: 16px; }
-    .story-stats { display: flex; gap: 32px; margin-top: 32px; }
-    .story-stat { text-align: center; }
-    .story-stat-num { font-size: 36px; font-weight: 900; }
-    .story-stat-num.purple { color: var(--purple); }
-    .story-stat-num.orange { color: var(--orange); }
-    .story-stat-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
-
-    /* ==================== PLATFORM ACCESS ==================== */
-    .access-section { background: var(--bg); }
-    .access-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-    .access-card {
-      border-radius: var(--radius-lg); padding: 48px; position: relative; overflow: hidden;
-      transition: all var(--transition-slow);
-    }
-    .access-card::after {
-      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
-      pointer-events: none;
-    }
-    .access-card.ted-access {
-      background: linear-gradient(135deg, #f97316, #fb923c);
-      color: #fff;
-    }
-    .access-card.ted-access:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(249,115,22,0.3); }
-    .access-card.aria-access {
-      background: linear-gradient(135deg, #8b5cf6, #a855f7);
-      color: #fff;
-    }
-    .access-card.aria-access:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(139,92,246,0.3); }
-    .access-card-icon {
-      width: 60px; height: 60px; border-radius: 16px;
-      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
-      display: flex; align-items: center; justify-content: center; margin-bottom: 24px;
-    }
-    .access-card h3 { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
-    .access-card p { font-size: 16px; opacity: 0.9; line-height: 1.7; margin-bottom: 28px; }
-    .access-card-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 14px 32px; border-radius: 12px;
-      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
-      color: #fff; font-size: 16px; font-weight: 700; text-decoration: none;
-      border: 2px solid rgba(255,255,255,0.3); transition: all 0.3s;
-    }
-    .access-card-btn:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
-    .access-card-features { list-style: none; margin-bottom: 24px; }
-    .access-card-features li {
-      font-size: 14px; opacity: 0.85; padding: 6px 0;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .access-card-features li svg { width: 16px; height: 16px; opacity: 0.8; }
-
-    @media (max-width: 900px) {
-      .story-grid { grid-template-columns: 1fr; }
-      .story-visual { order: -1; }
-      .story-3d-wrap spline-viewer { height: 280px; }
-      .access-grid { grid-template-columns: 1fr; }
-      .demo-content { height: 350px; }
-      .demo-tabs { flex-wrap: wrap; }
+    .footer-status-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+      box-shadow: 0 0 8px rgba(16,185,129,0.5);
     }
 
     /* ==================== ANIMATIONS ==================== */
-    @keyframes fadeInUp { from { opacity:0; transform: translateY(28px); } to { opacity:1; transform: translateY(0); } }
-    @keyframes fadeInDown { from { opacity:0; transform: translateY(-16px); } to { opacity:1; transform: translateY(0); } }
-    .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
-    .fade-in.visible { opacity: 1; transform: translateY(0); }
-    .delay-1 { transition-delay: 0.1s; }
-    .delay-2 { transition-delay: 0.2s; }
-    .delay-3 { transition-delay: 0.3s; }
-    .delay-4 { transition-delay: 0.4s; }
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
 
     /* ==================== RESPONSIVE ==================== */
-    @media (max-width: 900px) {
-      .nav-links, .nav-cta { display: none; }
-      .hero-characters { gap: 20px; }
-      .hero-char-img-wrap { width: 140px; height: 140px; }
-      .meet-grid { grid-template-columns: 1fr; }
-      .together-flow { grid-template-columns: 1fr; }
-      .together-arrow { justify-content: center; transform: rotate(90deg); }
+    @media (max-width: 768px) {
+      .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+      .hero h1 { font-size: 36px; }
+      .hero-desc { margin: 0 auto 28px; }
+      .hero-buttons { justify-content: center; }
+      .hero-stats { justify-content: center; gap: 24px; }
+      .hero-float-card { display: none; }
+      .products-grid { grid-template-columns: 1fr; }
       .features-grid { grid-template-columns: 1fr; }
-      .testimonials-grid { grid-template-columns: 1fr; }
-      .pricing-grid { grid-template-columns: 1fr; }
-      .price-card.featured { transform: none; }
-      .trust-logos { gap: 12px; }
-      .cta-box { padding: 40px 24px; }
-      .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
-      .showcase-container spline-viewer { height: 320px; }
-      .hero-trust { flex-wrap: wrap; gap: 20px; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+      .showcase-frame { height: 300px; }
+      .mockup-body { grid-template-columns: 1fr; }
+      .mockup-sidebar { display: none; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: block; }
+      .section-title { font-size: 30px; }
+      .container { padding: 0 20px; }
     }
-    @media (max-width: 600px) {
-      .hero h1 { font-size: 30px; }
-      .hero-sub { font-size: 16px; }
-      .hero-characters { flex-direction: column; align-items: center; gap: 24px; }
-      .hero-plus { margin-bottom: 0; }
-      .hero-buttons { flex-direction: column; align-items: center; }
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 28px; }
+      .hero-stats { flex-direction: column; gap: 16px; align-items: center; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 12px; }
+      .mockup-content { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top bar -->
   <div class="top-bar"></div>
-
-  <!-- Background -->
   <div class="bg-mesh"></div>
-  <canvas id="particles-canvas"></canvas>
 
   <!-- ==================== NAVBAR ==================== -->
-  <nav class="navbar">
+  <nav class="navbar" id="navbar">
     <div class="nav-inner">
       <a href="#" class="nav-logo">
-        <div class="nav-logo-mark">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 3L4 9V21H9V14H15V21H20V9L12 3Z" fill="url(#logoGrad)" stroke="url(#logoGrad)" stroke-width="1"/>
-            <circle cx="12" cy="10" r="2.5" fill="white"/>
-            <defs><linearGradient id="logoGrad" x1="4" y1="3" x2="20" y2="21"><stop stop-color="#8b5cf6"/><stop offset="1" stop-color="#f97316"/></linearGradient></defs>
-          </svg>
-        </div>
+        <div class="nav-logo-icon">A</div>
         <span class="nav-logo-text">ARIA & Ted</span>
       </a>
-      <div class="nav-links">
-        <a href="#meet" class="nav-link">הצוות</a>
-        <a href="#demo" class="nav-link">דמו</a>
-        <a href="#features" class="nav-link">יכולות</a>
-        <a href="#access" class="nav-link">גישה</a>
-        <a href="#pricing" class="nav-link">תמחור</a>
+      <div class="nav-links" id="nav-links">
+        <a href="#products" class="nav-link">המוצרים</a>
+        <a href="#features" class="nav-link">יתרונות</a>
+        <a href="#pricing" class="nav-link">מחירים</a>
+        <a href="dashboard.html" class="nav-link">CRM</a>
+        <a href="#cta" class="nav-cta">התחילו עכשיו ←</a>
       </div>
-      <a href="#cta" class="nav-cta">התחילו בחינם</a>
+      <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('show')">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </nav>
 
   <!-- ==================== HERO ==================== -->
-  <section class="hero">
+  <section class="hero" id="hero">
     <div class="hero-inner">
-      <div class="hero-badge">
-        <span class="hero-badge-dot"></span>
-        שני עוזרים חכמים. מערכת אחת.
-      </div>
-      <h1>הכירו את <span class="purple-word">ARIA</span> & <span class="orange-word">Ted</span><br>הצוות שמנהל לכם את <span class="gradient-word">העסק</span></h1>
-      <p class="hero-sub">
-        Ted מנהל את הוואטסאפ שלכם ועונה ללקוחות 24/7, ו-ARIA יוצרת קמפיינים פרסומיים ודפי נחיתה עם AI. ביחד, הם מנהלים לכם את כל העסק.
-      </p>
-
-      <div class="hero-characters">
-        <div class="hero-char aria">
-          <div class="hero-char-img-wrap">
-            <img src="aria-logo.png" alt="ARIA - AI Campaign Creator">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="pulse"></span>
+          פעיל עכשיו — AI שעובד 24/7
+        </div>
+        <h1>
+          הצוות החכם<br>
+          <span class="gradient-text">שמנהל לך את העסק</span>
+        </h1>
+        <p class="hero-desc">
+          Ted מנהל את הוואטסאפ שלך — עונה ללקוחות, מזהה לידים ומנהל שיחות.
+          ARIA יוצרת ומנהלת קמפיינים בפייסבוק ובגוגל. ביחד הם הצוות המושלם.
+        </p>
+        <div class="hero-buttons">
+          <a href="dashboard.html" class="btn-primary">כניסה לדשבורד ←</a>
+          <a href="#products" class="btn-secondary">📖 גלו עוד</a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-value">10K+</div>
+            <div class="hero-stat-label">הודעות ביום</div>
           </div>
-          <div class="hero-char-name">ARIA</div>
-          <div class="hero-char-role">יוצרת הקמפיינים</div>
-          <div class="hero-char-badge">AI Campaigns</div>
-        </div>
-        <div class="hero-plus">&</div>
-        <div class="hero-char ted">
-          <div class="hero-char-img-wrap">
-            <img src="ted-logo.png" alt="Ted - WhatsApp AI Assistant">
+          <div>
+            <div class="hero-stat-value">500+</div>
+            <div class="hero-stat-label">קמפיינים פעילים</div>
           </div>
-          <div class="hero-char-name">Ted</div>
-          <div class="hero-char-role">העוזר החכם בוואטסאפ</div>
-          <div class="hero-char-badge">WhatsApp AI</div>
+          <div>
+            <div class="hero-stat-value">98%</div>
+            <div class="hero-stat-label">שביעות רצון</div>
+          </div>
         </div>
       </div>
 
-      <div class="hero-buttons">
-        <a href="#cta" class="btn-primary">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          התחילו בחינם
-        </a>
-        <a href="#meet" class="btn-outline">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          הכירו את הצוות
-        </a>
-      </div>
-
-      <div class="hero-trust">
-        <div class="trust-item">
-          <span class="trust-num">10K+</span>
-          <span class="trust-label">עסקים פעילים</span>
-        </div>
-        <div class="trust-item">
-          <span class="trust-num">24/7</span>
-          <span class="trust-label">פעיל תמיד</span>
-        </div>
-        <div class="trust-item">
-          <span class="trust-num">250%</span>
-          <span class="trust-label">ROI ממוצע</span>
+      <div class="hero-visual">
+        <div class="hero-img-wrapper">
+          <img src="hero-characters.png" alt="Ted & ARIA - הצוות החכם">
+          <div class="hero-float-card float-card-1">
+            <div class="float-icon">💬</div>
+            <div>
+              <div style="font-weight:700;">+127 הודעות</div>
+              <div style="font-size:11px; color:var(--text-muted);">היום</div>
+            </div>
+          </div>
+          <div class="hero-float-card float-card-2">
+            <div class="float-icon">📈</div>
+            <div>
+              <div style="font-weight:700;">ROI 340%</div>
+              <div style="font-size:11px; color:var(--text-muted);">החודש</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================== TRUST BAR ==================== -->
-  <div class="trust-bar fade-in">
-    <div class="trust-bar-inner">
-      <div class="trust-bar-label">Powered by</div>
-      <div class="trust-logos">
-        <div class="trust-logo">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"/><path d="M16 14H8a4 4 0 0 0-4 4v2h16v-2a4 4 0 0 0-4-4z"/></svg>
-          Claude AI
-        </div>
-        <div class="trust-logo">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          WhatsApp
-        </div>
-        <div class="trust-logo">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-          Facebook Ads
-        </div>
-        <div class="trust-logo">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          Gemini AI
-        </div>
-        <div class="trust-logo">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-          MCP Protocol
-        </div>
+  <!-- ==================== PRODUCTS ==================== -->
+  <section class="products" id="products">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">🤖 הכירו את הצוות</div>
+        <h2 class="section-title">שני עוזרים. מיליון אפשרויות.</h2>
+        <p class="section-subtitle">כל אחד מומחה בתחומו — ביחד הם מנהלים לך עסק שלם</p>
       </div>
-    </div>
-  </div>
-
-  <!-- ==================== MEET THE TEAM ==================== -->
-  <section class="meet-section" id="meet">
-    <div class="section-inner">
-      <div class="section-header center fade-in">
-        <div class="section-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          הכירו את הצוות
-        </div>
-        <h2 class="section-title">שני עוזרים. <span class="gradient-word">מיליון</span> אפשרויות.</h2>
-        <p class="section-desc">כל אחד מומחה בתחומו. ביחד הם צוות בלתי מנוצח לניהול העסק שלכם.</p>
-      </div>
-      <div class="meet-grid">
+      <div class="products-grid">
         <!-- Ted Card -->
-        <div class="meet-card ted-card fade-in">
-          <div class="meet-avatar">
+        <div class="product-card ted reveal reveal-delay-1">
+          <div class="product-avatar">
             <img src="ted-logo.png" alt="Ted">
           </div>
-          <h3>Ted</h3>
-          <p class="meet-subtitle">העוזר החכם בוואטסאפ</p>
-          <ul class="meet-features">
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              מענה אוטומטי חכם ללקוחות 24/7
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              ניהול לקוחות CRM מתקדם
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              ניהול קבוצות וסטטיסטיקות
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              תגובות מהירות ותזכורות
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              חיבור MCP ל-Claude AI
-            </li>
+          <div class="product-name ted-color">Ted</div>
+          <div class="product-role">מנהל וואטסאפ חכם</div>
+          <ul class="product-features">
+            <li>תגובות אוטומטיות חכמות</li>
+            <li>זיהוי לידים ותיוג אוטומטי</li>
+            <li>ניהול קבוצות וואטסאפ</li>
+            <li>מענה 24/7 בשפה טבעית</li>
+            <li>דשבורד CRM מלא</li>
+            <li>אינטגרציה עם Google Sheets</li>
           </ul>
+          <a href="http://localhost:3777" class="product-btn ted-btn">
+            פתח דשבורד Ted ←
+          </a>
         </div>
 
         <!-- ARIA Card -->
-        <div class="meet-card aria-card fade-in delay-2">
-          <div class="meet-avatar">
+        <div class="product-card aria reveal reveal-delay-2">
+          <div class="product-avatar">
             <img src="aria-logo.png" alt="ARIA">
           </div>
-          <h3>ARIA</h3>
-          <p class="meet-subtitle">יוצרת הקמפיינים החכמה</p>
-          <ul class="meet-features">
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              יצירת קמפיינים עם AI מבריף בעברית
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              מחולל תמונות ודפי נחיתה
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              פרסום ישיר בפייסבוק ואינסטגרם
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              אנליטיקס ומעקב ביצועים
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              חיבור Gemini AI ליצירת תוכן
-            </li>
+          <div class="product-name aria-color">ARIA</div>
+          <div class="product-role">מנהלת קמפיינים AI</div>
+          <ul class="product-features">
+            <li>יצירת קמפיינים בפייסבוק</li>
+            <li>ניהול Google Ads</li>
+            <li>יצירת תוכן ותמונות AI</li>
+            <li>דפי נחיתה אוטומטיים</li>
+            <li>אנליטיקס ו-ROI בזמן אמת</li>
+            <li>A/B Testing חכם</li>
           </ul>
+          <a href="http://localhost:3888" class="product-btn aria-btn">
+            פתח דשבורד ARIA ←
+          </a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================== HOW THEY WORK TOGETHER ==================== -->
-  <section class="together-section" id="how">
-    <div class="section-inner">
-      <div class="section-header center fade-in">
-        <div class="section-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          איך זה עובד
-        </div>
-        <h2 class="section-title">איך <span class="orange-word">Ted</span> ו-<span class="purple-word">ARIA</span> עובדים ביחד</h2>
-        <p class="section-desc">תהליך פשוט שמפעיל צוות AI שלם לטובת העסק שלכם.</p>
+  <!-- ==================== 3D SHOWCASE ==================== -->
+  <section class="showcase-3d" id="showcase">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">🌐 טכנולוגיה</div>
+        <h2 class="section-title">חוויה אינטראקטיבית</h2>
+        <p class="section-subtitle">טכנולוגיה מתקדמת שעובדת בשבילך — חקרו את העולם שלנו</p>
       </div>
-      <div class="together-flow fade-in">
-        <div class="together-step step-ted">
-          <div class="together-step-icon">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          </div>
-          <h3>Ted מקבל לידים</h3>
-          <p>לקוחות שולחים הודעה בוואטסאפ. Ted עונה, מסווג ומכניס ל-CRM אוטומטית.</p>
-        </div>
-        <div class="together-arrow">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-        </div>
-        <div class="together-step step-aria">
-          <div class="together-step-icon">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          </div>
-          <h3>ARIA יוצרת קמפיינים</h3>
-          <p>ARIA מנתחת את הנתונים ויוצרת קמפיינים ממוקדים כדי למשוך עוד לקוחות.</p>
-        </div>
-        <div class="together-arrow">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-        </div>
-        <div class="together-step step-both">
-          <div class="together-step-icon">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
-          </div>
-          <h3>ביחד הם מנהלים הכל</h3>
-          <p>לידים נכנסים, קמפיינים יוצאים, והעסק צומח. אתם רק מפקחים.</p>
-        </div>
+      <div class="showcase-frame reveal">
+        <spline-viewer url="https://prod.spline.design/UWoeqiir20o49Dah/scene.splinecode" loading-anim-type="spinner-small-dark"></spline-viewer>
       </div>
     </div>
   </section>
 
   <!-- ==================== FEATURES ==================== -->
-  <section class="features-section" id="features">
-    <div class="section-inner">
-      <div class="section-header center fade-in">
-        <div class="section-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          יכולות
-        </div>
-        <h2 class="section-title">הכל מה שצריך. <span class="gradient-word">במקום אחד.</span></h2>
-        <p class="section-desc">כל הכלים שהעסק שלכם צריך, מרוכזים בפלטפורמה אחת חכמה.</p>
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">⚡ יתרונות</div>
+        <h2 class="section-title">למה לבחור בנו?</h2>
+        <p class="section-subtitle">הכלים הכי מתקדמים לניהול עסק חכם</p>
       </div>
       <div class="features-grid">
-        <div class="feature-card fade-in">
-          <div class="feature-icon" style="background:rgba(249,115,22,0.1);color:var(--orange);">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          </div>
-          <h3>מענה חכם בוואטסאפ</h3>
-          <p>AI שמבין הקשר, זוכר פרטים, שומר תזכורות ועונה ללקוחות בצורה טבעית 24/7.</p>
-          <span class="feature-badge ted">Ted</span>
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="feature-icon">🤖</div>
+          <h3>AI מתקדם</h3>
+          <p>מודלים חכמים שמבינים את הלקוחות שלך ויוצרים תוכן מותאם אישית לכל קמפיין</p>
         </div>
-        <div class="feature-card fade-in delay-1">
-          <div class="feature-icon" style="background:rgba(249,115,22,0.1);color:var(--orange);">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          </div>
-          <h3>ניהול לקוחות CRM</h3>
-          <p>תגיות, הערות, תזכורות, Follow-up ומעקב אינטראקציות. כל המידע במקום אחד.</p>
-          <span class="feature-badge ted">Ted</span>
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="feature-icon">⚡</div>
+          <h3>אוטומציה מלאה</h3>
+          <p>מהליד הראשון ועד הסגירה — הכל עובד אוטומטית ללא מגע יד אדם</p>
         </div>
-        <div class="feature-card fade-in delay-2">
-          <div class="feature-icon" style="background:rgba(139,92,246,0.1);color:var(--purple);">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          </div>
-          <h3>יצירת קמפיינים עם AI</h3>
-          <p>כתבו בריף בעברית חופשית ו-AI מנתח ויוצר קמפיין שלם עם קופי, תמונות וקהל יעד.</p>
-          <span class="feature-badge aria">ARIA</span>
+        <div class="feature-card reveal reveal-delay-3">
+          <div class="feature-icon">📊</div>
+          <h3>אנליטיקס בזמן אמת</h3>
+          <p>ראו בדיוק מה עובד ומה לא. דוחות ROI, ביצועי קמפיינים ותובנות חכמות</p>
         </div>
-        <div class="feature-card fade-in delay-1">
-          <div class="feature-icon" style="background:rgba(139,92,246,0.1);color:var(--purple);">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-          </div>
-          <h3>תמונות ודפי נחיתה</h3>
-          <p>מחולל תמונות AI מפרומפט בעברית + בונה דפי נחיתה עם תצוגה מקדימה חיה.</p>
-          <span class="feature-badge aria">ARIA</span>
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="feature-icon">🔗</div>
+          <h3>אינטגרציות</h3>
+          <p>חיבור ישיר לפייסבוק, גוגל, וואטסאפ, Google Sheets ועוד עשרות פלטפורמות</p>
         </div>
-        <div class="feature-card fade-in delay-2">
-          <div class="feature-icon" style="background:rgba(139,92,246,0.1);color:var(--purple);">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-          </div>
-          <h3>פרסום ישיר בפייסבוק</h3>
-          <p>חיבור OAuth, יצירת קמפיינים, Ad Sets ופרסום ישירות מהממשק בלחיצה אחת.</p>
-          <span class="feature-badge aria">ARIA</span>
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="feature-icon">🛡️</div>
+          <h3>אבטחה מקסימלית</h3>
+          <p>הנתונים שלך מוצפנים ומאובטחים. תקן SOC2 ו-GDPR מלא</p>
         </div>
-        <div class="feature-card fade-in delay-3">
-          <div class="feature-icon" style="background:rgba(99,102,241,0.1);color:var(--primary);">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
-          </div>
-          <h3>אנליטיקס ותובנות</h3>
-          <p>דשבורד מתקדם עם סטטיסטיקות, פעילות לקוחות ומעקב ביצועי קמפיינים.</p>
-          <span class="feature-badge ted">Ted</span>
-          <span class="feature-badge aria" style="margin-right:4px;">ARIA</span>
+        <div class="feature-card reveal reveal-delay-3">
+          <div class="feature-icon">🌍</div>
+          <h3>עברית מושלמת</h3>
+          <p>נבנה מהיסוד עבור עסקים ישראליים. תמיכה מלאה בעברית ו-RTL</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================== DEMO SECTION ==================== -->
-  <section class="demo-section" id="demo">
-    <div class="section-inner">
-      <div class="section-header center fade-in">
-        <div class="section-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          צפו במערכות
+  <!-- ==================== DASHBOARD PREVIEW ==================== -->
+  <section class="dashboard-preview" id="dashboard">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">🖥️ דשבורד</div>
+        <h2 class="section-title">הכל במקום אחד</h2>
+        <p class="section-subtitle">דשבורד מאוחד שמחבר את Ted ו-ARIA — ניהול העסק בלחיצה</p>
+      </div>
+      <div class="dashboard-mockup reveal">
+        <div class="mockup-bar">
+          <div class="mockup-dot r"></div>
+          <div class="mockup-dot y"></div>
+          <div class="mockup-dot g"></div>
+          <div class="mockup-url">localhost:8889/dashboard.html</div>
         </div>
-        <h2 class="section-title">ראו את <span class="orange-word">Ted</span> ו-<span class="purple-word">ARIA</span> בפעולה</h2>
-        <p class="section-desc">הצצה לתוך המערכות שעובדות עבורכם 24/7</p>
-      </div>
-
-      <div class="demo-tabs fade-in">
-        <button class="demo-tab ted active" onclick="switchDemo('ted')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-          Ted - וואטסאפ AI
-        </button>
-        <button class="demo-tab aria" onclick="switchDemo('aria')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-          ARIA - קמפיינים AI
-        </button>
-      </div>
-
-      <!-- Ted Demo -->
-      <div class="demo-panel active" id="demo-ted">
-        <div class="demo-browser fade-in">
-          <div class="demo-browser-bar">
-            <div class="demo-dots"><span class="demo-dot"></span><span class="demo-dot"></span><span class="demo-dot"></span></div>
-            <div class="demo-url">localhost:3777/dashboard</div>
+        <div class="mockup-body">
+          <div class="mockup-sidebar">
+            <div class="mockup-nav-item active">📊 סקירה כללית</div>
+            <div class="mockup-nav-item">💬 Ted — וואטסאפ</div>
+            <div class="mockup-nav-item">🎯 ARIA — קמפיינים</div>
+            <div class="mockup-nav-item">👥 לידים</div>
+            <div class="mockup-nav-item">📈 אנליטיקס</div>
+            <div class="mockup-nav-item">⚙️ הגדרות</div>
           </div>
-          <div class="demo-content" style="background: linear-gradient(135deg, rgba(249,115,22,0.05), rgba(251,146,60,0.03));">
-            <div class="demo-content-overlay">
-              <img src="ted-logo.png" alt="Ted" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--orange); margin-bottom:16px; object-fit:cover;">
-              <h3 style="color:var(--orange);">Ted - מרכז הפיקוד של הוואטסאפ</h3>
-              <p>דשבורד אנליטיקס מלא, מענה אוטומטי חכם, CRM, ניהול קבוצות, ושליחת מדיה - הכל מוואטסאפ אחד.</p>
-              <div class="demo-features-row">
-                <span class="demo-feature-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> מענה אוטומטי</span>
-                <span class="demo-feature-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> CRM חכם</span>
-                <span class="demo-feature-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg> אנליטיקס</span>
-                <span class="demo-feature-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg> דשבורד</span>
-              </div>
+          <div class="mockup-content">
+            <div class="mockup-stat">
+              <div class="mockup-stat-label">הודעות היום</div>
+              <div class="mockup-stat-value">1,284</div>
+              <div class="mockup-stat-change">↑ 12% מאתמול</div>
+            </div>
+            <div class="mockup-stat">
+              <div class="mockup-stat-label">קמפיינים פעילים</div>
+              <div class="mockup-stat-value">23</div>
+              <div class="mockup-stat-change">↑ 3 חדשים</div>
+            </div>
+            <div class="mockup-stat">
+              <div class="mockup-stat-label">לידים חדשים</div>
+              <div class="mockup-stat-value">847</div>
+              <div class="mockup-stat-change">↑ 28% מהשבוע שעבר</div>
+            </div>
+            <div class="mockup-stat">
+              <div class="mockup-stat-label">ROI ממוצע</div>
+              <div class="mockup-stat-value">340%</div>
+              <div class="mockup-stat-change">↑ 15% מהחודש שעבר</div>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- ARIA Demo -->
-      <div class="demo-panel" id="demo-aria">
-        <div class="demo-browser fade-in">
-          <div class="demo-browser-bar">
-            <div class="demo-dots"><span class="demo-dot"></span><span class="demo-dot"></span><span class="demo-dot"></span></div>
-            <div class="demo-url">localhost:8080/campaigns</div>
-          </div>
-          <div class="demo-content" style="background: linear-gradient(135deg, rgba(139,92,246,0.05), rgba(168,85,247,0.03));">
-            <div class="demo-content-overlay">
-              <img src="aria-logo.png" alt="ARIA" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--purple); margin-bottom:16px; object-fit:cover;">
-              <h3 style="color:var(--purple);">ARIA - יוצרת הקמפיינים החכמה</h3>
-              <p>יצירת קמפיינים בקליק, מחולל תמונות AI, בניית דפי נחיתה, ופרסום ישיר בפייסבוק - הכל אוטומטי.</p>
-              <div class="demo-features-row">
-                <span class="demo-feature-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/></svg> קמפיינים AI</span>
-                <span class="demo-feature-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> מחולל תמונות</span>
-                <span class="demo-feature-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> דפי נחיתה</span>
-                <span class="demo-feature-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> פייסבוק Ads</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ==================== 3D SHOWCASE ==================== -->
-  <section class="showcase-section" id="3d">
-    <div class="section-inner">
-      <div class="section-header center fade-in">
-        <div class="section-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-          טכנולוגיה
-        </div>
-        <h2 class="section-title">טכנולוגיה מ<span class="gradient-word">הדור הבא</span></h2>
-        <p class="section-desc">חוויה אינטראקטיבית תלת-מימדית. הזיזו את העכבר מעל הסצנה.</p>
-      </div>
-      <div class="showcase-container fade-in">
-        <spline-viewer url="https://prod.spline.design/UWoeqiir20o49Dah/scene.splinecode" background="rgba(248,250,252,1)" loading="lazy"></spline-viewer>
-        <div class="showcase-overlay">
-          <h3>חוויית AI אינטראקטיבית</h3>
-          <p>סצנה תלת-מימדית אינטראקטיבית בנויה עם Spline</p>
-          <div class="showcase-hint">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-            הזיזו את העכבר
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== ARIA STORY ==================== -->
-  <section class="story-section">
-    <div class="section-inner">
-      <div class="story-grid">
-        <div class="story-visual fade-in">
-          <div class="story-3d-wrap">
-            <spline-viewer url="https://prod.spline.design/PBQQBw8bfXDhBo7w/scene.splinecode" background="rgba(248,250,252,1)" loading="lazy" style="height:400px;"></spline-viewer>
-          </div>
-          <div style="display:flex; justify-content:center; gap:16px; margin-top:24px;">
-            <img src="aria-logo.png" alt="ARIA" style="width:64px; height:64px; border-radius:50%; border:3px solid var(--purple); object-fit:cover; box-shadow:var(--shadow-purple);">
-            <img src="ted-logo.png" alt="Ted" style="width:64px; height:64px; border-radius:50%; border:3px solid var(--orange); object-fit:cover; box-shadow:var(--shadow-orange);">
-          </div>
-        </div>
-        <div class="story-text fade-in">
-          <div class="section-badge">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-            הסיפור שלנו
-          </div>
-          <h2>הכירו את <span class="purple-word">ARIA</span> - היוצרת שמאחורי הקלעים</h2>
-          <p>ARIA (AI Resource & Intelligence Assistant) היא מערכת AI שמבינה את העסק שלכם ויוצרת קמפיינים שיווקיים מקצועיים באופן אוטומטי.</p>
-          <p>היא יודעת לכתוב טקסטים שיווקיים, ליצור תמונות עם AI, לבנות דפי נחיתה מלאים, ולפרסם ישירות בפייסבוק - הכל בקליק אחד.</p>
-          <p>ביחד עם <span style="color:var(--orange); font-weight:700;">Ted</span> שמנהל את כל התקשורת בוואטסאפ, הם יוצרים צוות מושלם: ARIA מביאה את הלקוחות ו-Ted מטפל בהם.</p>
-          <div class="story-stats">
-            <div class="story-stat">
-              <div class="story-stat-num purple">∞</div>
-              <div class="story-stat-label">קמפיינים</div>
-            </div>
-            <div class="story-stat">
-              <div class="story-stat-num orange">24/7</div>
-              <div class="story-stat-label">מענה אוטומטי</div>
-            </div>
-            <div class="story-stat">
-              <div class="story-stat-num purple">5x</div>
-              <div class="story-stat-label">יותר לידים</div>
-            </div>
-            <div class="story-stat">
-              <div class="story-stat-num orange">80%</div>
-              <div class="story-stat-label">חיסכון בזמן</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== TESTIMONIALS ==================== -->
-  <section class="testimonials-section" id="testimonials">
-    <div class="section-inner">
-      <div class="section-header center fade-in">
-        <div class="section-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          לקוחות
-        </div>
-        <h2 class="section-title">מה הלקוחות שלנו אומרים</h2>
-      </div>
-      <div class="testimonials-grid">
-        <div class="testimonial-card fade-in">
-          <div class="testimonial-stars">
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <p class="testimonial-text">"Ted עונה ללקוחות בוואטסאפ ו-ARIA יוצרת קמפיינים בקליק. חסכנו 80% מהזמן בניהול העסק!"</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar" style="background:var(--gradient-orange);">ד</div>
-            <div>
-              <div class="testimonial-name">דנה לוי</div>
-              <div class="testimonial-role">מנכ"ל, StartHub</div>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card fade-in delay-1">
-          <div class="testimonial-stars">
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <p class="testimonial-text">"הצמד הזה פשוט אדיר. ARIA יצרה לנו 12 קמפיינים ו-Ted עונה לכל הלידים. תוצאות מיידיות!"</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar" style="background:var(--gradient-purple);">ר</div>
-            <div>
-              <div class="testimonial-name">רון כהן</div>
-              <div class="testimonial-role">מנהל שיווק, TechFlow</div>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card fade-in delay-2">
-          <div class="testimonial-stars">
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <p class="testimonial-text">"כמו שיש לך שני עובדים שלא הולכים לישון. ARIA ו-Ted עובדים ביחד בצורה מושלמת."</p>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar" style="background:var(--gradient-btn);">מ</div>
-            <div>
-              <div class="testimonial-name">מיכל אברהם</div>
-              <div class="testimonial-role">מייסדת, EcoStyle</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== PLATFORM ACCESS ==================== -->
-  <section class="access-section" id="access">
-    <div class="section-inner">
-      <div class="section-header center fade-in">
-        <div class="section-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-          גישה למערכות
-        </div>
-        <h2 class="section-title">נסו את המערכות <span class="gradient-word">עכשיו</span></h2>
-        <p class="section-desc">גישה ישירה לשתי המערכות. התחילו לעבוד עם הצוות החכם שלכם.</p>
-      </div>
-      <div class="access-grid">
-        <!-- Ted Access -->
-        <div class="access-card ted-access fade-in">
-          <div class="access-card-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-          </div>
-          <h3>Ted - וואטסאפ AI</h3>
-          <p>דשבורד מלא לניהול הוואטסאפ. מענה אוטומטי חכם, CRM, ניתוח שיחות, וניהול קבוצות.</p>
-          <ul class="access-card-features">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> דשבורד אנליטיקס בזמן אמת</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> מענה אוטומטי עם Claude AI</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> CRM וניהול לקוחות</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> ריבוי סוכנים ואוטומציה</li>
-          </ul>
-          <a href="http://localhost:3777" target="_blank" class="access-card-btn">
-            פתחו את Ted
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </a>
-        </div>
-
-        <!-- ARIA Access -->
-        <div class="access-card aria-access fade-in delay-1">
-          <div class="access-card-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-          </div>
-          <h3>ARIA - קמפיינים AI</h3>
-          <p>מערכת יצירת קמפיינים אוטומטית. כתיבת טקסטים, יצירת תמונות, דפי נחיתה, ופרסום בפייסבוק.</p>
-          <ul class="access-card-features">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> יצירת קמפיינים בקליק אחד</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> מחולל תמונות AI (Gemini)</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> בניית דפי נחיתה ויזואלית</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> פרסום ישיר ב-Facebook Ads</li>
-          </ul>
-          <a href="http://localhost:8080" target="_blank" class="access-card-btn">
-            פתחו את ARIA
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </a>
-        </div>
+      <div style="text-align:center; margin-top:32px;" class="reveal">
+        <a href="dashboard.html" class="btn-primary">פתח דשבורד מאוחד ←</a>
       </div>
     </div>
   </section>
 
   <!-- ==================== PRICING ==================== -->
-  <section class="pricing-section" id="pricing">
-    <div class="section-inner">
-      <div class="section-header center fade-in">
-        <div class="section-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          תמחור
-        </div>
-        <h2 class="section-title">תוכנית לכל עסק</h2>
-        <p class="section-desc">בחרו את המסלול שמתאים לכם. כל התוכניות כוללות את Ted + ARIA.</p>
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">💎 מחירים</div>
+        <h2 class="section-title">תוכנית שמתאימה לכל עסק</h2>
+        <p class="section-subtitle">התחילו בחינם — שדרגו כשתרצו</p>
       </div>
       <div class="pricing-grid">
         <!-- Starter -->
-        <div class="price-card fade-in">
-          <div class="price-name">סטרטר</div>
-          <div class="price-amount"><span class="currency">$</span>99</div>
-          <div class="price-period">לחודש</div>
-          <div class="price-includes">
-            <span class="price-char-badge ted">Ted</span>
-            <span class="price-char-badge aria">ARIA</span>
-          </div>
+        <div class="price-card reveal reveal-delay-1">
+          <div class="price-name">Starter</div>
+          <div class="price-desc">לעסקים קטנים</div>
+          <div class="price-amount">₪0 <span>/ חודש</span></div>
+          <div class="price-period">14 ימי ניסיון חינם</div>
           <ul class="price-features">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>מענה אוטומטי בוואטסאפ</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>CRM בסיסי</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>5 קמפיינים בחודש</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>תמיכה בסיסית</li>
+            <li>Ted — עד 100 הודעות/יום</li>
+            <li>ARIA — קמפיין אחד</li>
+            <li>דשבורד בסיסי</li>
+            <li>תמיכה במייל</li>
           </ul>
-          <button class="price-btn price-btn-outline">התחילו עכשיו</button>
+          <a href="#" class="price-btn outline">התחילו בחינם</a>
         </div>
 
         <!-- Pro -->
-        <div class="price-card featured fade-in delay-1">
-          <div class="price-popular">הכי פופולרי</div>
-          <div class="price-name">פרו</div>
-          <div class="price-amount" style="color:var(--primary);"><span class="currency">$</span>299</div>
-          <div class="price-period">לחודש</div>
-          <div class="price-includes">
-            <span class="price-char-badge ted">Ted Pro</span>
-            <span class="price-char-badge aria">ARIA Pro</span>
-          </div>
+        <div class="price-card popular reveal reveal-delay-2">
+          <div class="price-name">Pro</div>
+          <div class="price-desc">לעסקים שגדלים</div>
+          <div class="price-amount">₪299 <span>/ חודש</span></div>
+          <div class="price-period">חיסכון של 20% בתוכנית שנתית</div>
           <ul class="price-features">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>הכל בסטרטר +</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>קמפיינים ללא הגבלה</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>דפי נחיתה + תמונות AI</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>פרסום ישיר בפייסבוק</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>CRM מתקדם + ריבוי סוכנים</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>תמיכה בעדיפות</li>
+            <li>Ted — הודעות ללא הגבלה</li>
+            <li>ARIA — עד 10 קמפיינים</li>
+            <li>דשבורד מאוחד מלא</li>
+            <li>AI יצירת תוכן</li>
+            <li>אנליטיקס מתקדם</li>
+            <li>תמיכה 24/7</li>
           </ul>
-          <button class="price-btn price-btn-gradient">התחילו עכשיו</button>
+          <a href="#" class="price-btn primary">בחרו Pro ←</a>
         </div>
 
         <!-- Enterprise -->
-        <div class="price-card fade-in delay-2">
-          <div class="price-name">אנטרפרייז</div>
-          <div class="price-amount"><span class="currency">$</span>799</div>
-          <div class="price-period">לחודש</div>
-          <div class="price-includes">
-            <span class="price-char-badge ted">Ted Enterprise</span>
-            <span class="price-char-badge aria">ARIA Enterprise</span>
-          </div>
+        <div class="price-card reveal reveal-delay-3">
+          <div class="price-name">Enterprise</div>
+          <div class="price-desc">לארגונים גדולים</div>
+          <div class="price-amount">בואו נדבר</div>
+          <div class="price-period">מותאם אישית</div>
           <ul class="price-features">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>הכל בפרו +</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>API מלא + MCP Server</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>אנליטיקס מתקדם</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>SLA + מנהל לקוח ייעודי</li>
+            <li>הכל ב-Pro ועוד:</li>
+            <li>API מלא</li>
+            <li>SSO ואבטחה מתקדמת</li>
+            <li>מנהל לקוח ייעודי</li>
+            <li>אינטגרציות מותאמות</li>
+            <li>SLA 99.9%</li>
           </ul>
-          <button class="price-btn price-btn-outline">צרו קשר</button>
+          <a href="#" class="price-btn outline">צרו קשר</a>
         </div>
       </div>
     </div>
@@ -1363,132 +933,127 @@
 
   <!-- ==================== CTA ==================== -->
   <section class="cta-section" id="cta">
-    <div class="cta-3d-bg">
-      <spline-viewer url="https://prod.spline.design/LEvjG3OETYd2GsRw/scene.splinecode" background="transparent" loading="lazy"></spline-viewer>
-    </div>
-    <div class="cta-box fade-in">
-      <div class="cta-chars">
-        <div class="cta-char-img aria">
-          <img src="aria-logo.png" alt="ARIA">
+    <div class="container">
+      <div class="cta-content reveal">
+        <div class="cta-characters">
+          <div class="cta-char">
+            <img src="ted-logo.png" alt="Ted">
+          </div>
+          <div class="cta-char">
+            <img src="aria-logo.png" alt="ARIA">
+          </div>
         </div>
-        <div class="cta-char-img ted">
-          <img src="ted-logo.png" alt="Ted">
+        <h2>מוכנים להתחיל?</h2>
+        <p>הצטרפו לאלפי עסקים שכבר משתמשים ב-Ted ו-ARIA לניהול חכם</p>
+        <div class="hero-buttons" style="justify-content:center;">
+          <a href="dashboard.html" class="btn-primary">כניסה לדשבורד ←</a>
+          <a href="https://wa.me/972501234567" class="btn-secondary">💬 דברו איתנו</a>
         </div>
       </div>
-      <h2>מוכנים להכיר את <span class="gradient-word">הצוות</span>?</h2>
-      <p>הצטרפו לאלפי בעלי עסקים שכבר משתמשים ב-ARIA & Ted. התחילו בחינם ושדרגו כשתהיו מוכנים.</p>
-      <a href="#" class="btn-primary" style="font-size:18px; padding:18px 48px;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        התחילו בחינם עכשיו
-      </a>
     </div>
   </section>
 
   <!-- ==================== FOOTER ==================== -->
   <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <div class="nav-logo-mark" style="width:32px; height:32px; border-radius:10px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 3L4 9V21H9V14H15V21H20V9L12 3Z" fill="url(#footerGrad)" stroke="url(#footerGrad)" stroke-width="1"/>
-            <circle cx="12" cy="10" r="2.5" fill="white"/>
-            <defs><linearGradient id="footerGrad" x1="4" y1="3" x2="20" y2="21"><stop stop-color="#8b5cf6"/><stop offset="1" stop-color="#f97316"/></linearGradient></defs>
-          </svg>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="footer-logo-icon">A</div>
+            <span class="footer-logo-text">ARIA & Ted</span>
+          </div>
+          <p class="footer-desc">
+            הצוות החכם שמנהל לך את העסק. AI מתקדם לניהול וואטסאפ, קמפיינים ולידים.
+          </p>
         </div>
-        <span class="footer-text">ARIA & Ted &copy; 2026</span>
+        <div class="footer-col">
+          <h4>מוצרים</h4>
+          <a href="http://localhost:3777">Ted — וואטסאפ</a>
+          <a href="http://localhost:3888">ARIA — קמפיינים</a>
+          <a href="dashboard.html">דשבורד מאוחד</a>
+          <a href="#">API</a>
+        </div>
+        <div class="footer-col">
+          <h4>חברה</h4>
+          <a href="#">אודות</a>
+          <a href="#">בלוג</a>
+          <a href="#">קריירה</a>
+          <a href="#">צור קשר</a>
+        </div>
+        <div class="footer-col">
+          <h4>משפטי</h4>
+          <a href="#">תנאי שימוש</a>
+          <a href="#">פרטיות</a>
+          <a href="#">אבטחה</a>
+        </div>
       </div>
-      <div class="footer-links">
-        <a href="#meet" class="footer-link">הצוות</a>
-        <a href="#demo" class="footer-link">דמו</a>
-        <a href="#access" class="footer-link">גישה</a>
-        <a href="#pricing" class="footer-link">תמחור</a>
-        <a href="#" class="footer-link">פרטיות</a>
-        <a href="#" class="footer-link">תנאי שימוש</a>
+      <div class="footer-bottom">
+        <span>© 2025 ARIA & Ted. כל הזכויות שמורות.</span>
+        <div class="footer-status">
+          <div class="footer-status-item">
+            <div class="footer-status-dot"></div>
+            Ted פעיל
+          </div>
+          <div class="footer-status-item">
+            <div class="footer-status-dot"></div>
+            ARIA פעילה
+          </div>
+        </div>
       </div>
     </div>
   </footer>
 
   <!-- ==================== SCRIPTS ==================== -->
   <script>
-    // Scroll animations
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Reveal on scroll
+    const revealElements = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
-      });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-    // Particle system (orange + purple theme)
-    (function() {
-      const canvas = document.getElementById('particles-canvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      let w, h;
-      const particles = [];
-      const COUNT = 45;
-      const CONN = 130;
-      const colors = [
-        'rgba(249,115,22,',   // orange (Ted)
-        'rgba(139,92,246,',   // purple (ARIA)
-        'rgba(99,102,241,',   // indigo
-        'rgba(168,85,247,',   // violet
-      ];
-
-      function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
-      resize();
-      window.addEventListener('resize', resize);
-
-      for (let i = 0; i < COUNT; i++) {
-        particles.push({
-          x: Math.random() * w, y: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35,
-          r: Math.random() * 2 + 0.5,
-          c: colors[Math.floor(Math.random() * colors.length)]
-        });
-      }
-
-      function draw() {
-        ctx.clearRect(0, 0, w, h);
-        for (let i = 0; i < particles.length; i++) {
-          const p = particles[i];
-          p.x += p.vx; p.y += p.vy;
-          if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
-          if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
-          ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = p.c + '0.4)'; ctx.fill();
-          for (let j = i + 1; j < particles.length; j++) {
-            const q = particles[j];
-            const dx = p.x - q.x, dy = p.y - q.y;
-            const d = Math.sqrt(dx * dx + dy * dy);
-            if (d < CONN) {
-              ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y);
-              ctx.strokeStyle = p.c + (0.08 * (1 - d / CONN)) + ')';
-              ctx.lineWidth = 0.5; ctx.stroke();
-            }
-          }
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
         }
-        requestAnimationFrame(draw);
-      }
-      draw();
-    })();
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    revealElements.forEach(el => observer.observe(el));
 
-    // Demo tab switching
-    function switchDemo(type) {
-      document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.demo-panel').forEach(p => p.classList.remove('active'));
-      document.querySelector('.demo-tab.' + type).classList.add('active');
-      document.getElementById('demo-' + type).classList.add('active');
-    }
-
-    // Smooth scroll
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', e => {
-        e.preventDefault();
-        const t = document.querySelector(a.getAttribute('href'));
-        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       });
     });
-  </script>
 
+    // Counter animation
+    function animateCounters() {
+      document.querySelectorAll('.hero-stat-value').forEach(el => {
+        const text = el.textContent;
+        const match = text.match(/[\d,]+/);
+        if (!match) return;
+        const target = parseInt(match[0].replace(',', ''));
+        const suffix = text.replace(match[0], '');
+        let current = 0;
+        const step = Math.ceil(target / 40);
+        const timer = setInterval(() => {
+          current += step;
+          if (current >= target) { current = target; clearInterval(timer); }
+          el.textContent = current.toLocaleString() + suffix;
+        }, 30);
+      });
+    }
+    // Trigger counters when hero is visible
+    const heroObserver = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) { animateCounters(); heroObserver.disconnect(); }
+    }, { threshold: 0.3 });
+    heroObserver.observe(document.querySelector('.hero'));
+  </script>
 </body>
 </html>

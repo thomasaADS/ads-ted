@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARIA & Ted — דשבורד ניהול מאוחד</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0715;
+      --bg-card: #12101f;
+      --bg-hover: #1a1630;
+      --bg-sidebar: #0e0b1a;
+      --purple: #8b5cf6;
+      --purple-light: #a78bfa;
+      --purple-dark: #7c3aed;
+      --orange: #f97316;
+      --orange-light: #fb923c;
+      --indigo: #6366f1;
+      --green: #10b981;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --cyan: #06b6d4;
+      --text: #f1f0f5;
+      --text-muted: #8b85a3;
+      --text-dim: #5a5475;
+      --border: #1f1b2e;
+      --border-light: #2a2540;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'Heebo', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ==================== TOP BAR ==================== */
+    .topbar {
+      height: 56px; min-height: 56px;
+      background: var(--bg-sidebar);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px;
+      z-index: 50;
+    }
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
+    .topbar-logo { display: flex; align-items: center; gap: 10px; }
+    .topbar-logo-icon {
+      width: 32px; height: 32px; border-radius: 10px;
+      background: linear-gradient(135deg, #f97316, #8b5cf6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 900; color: white;
+    }
+    .topbar-logo-text {
+      font-size: 18px; font-weight: 800;
+      background: linear-gradient(135deg, #8b5cf6, #f97316);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    /* Tab Navigation */
+    .topbar-tabs { display: flex; gap: 4px; }
+    .topbar-tab {
+      padding: 8px 20px; border-radius: 10px;
+      font-size: 14px; font-weight: 600;
+      color: var(--text-muted); cursor: pointer;
+      transition: all 0.2s; border: none; background: none;
+      font-family: inherit; display: flex; align-items: center; gap: 8px;
+    }
+    .topbar-tab:hover { background: var(--bg-hover); color: var(--text); }
+    .topbar-tab.active {
+      background: rgba(139,92,246,0.15);
+      color: var(--purple-light);
+    }
+    .topbar-tab.ted.active { background: rgba(249,115,22,0.15); color: var(--orange-light); }
+
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-status {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--text-muted);
+    }
+    .status-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px rgba(16,185,129,0.5);
+    }
+    .status-dot.offline { background: var(--red); box-shadow: none; }
+    .topbar-home {
+      padding: 6px 14px; border-radius: 8px;
+      background: rgba(99,102,241,0.1);
+      color: var(--purple-light); font-size: 12px; font-weight: 600;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .topbar-home:hover { background: rgba(99,102,241,0.2); }
+
+    /* ==================== MAIN LAYOUT ==================== */
+    .main-layout {
+      flex: 1; display: flex; overflow: hidden;
+    }
+
+    /* ==================== SIDEBAR ==================== */
+    .sidebar {
+      width: 220px; min-width: 220px;
+      background: var(--bg-sidebar);
+      border-left: 1px solid var(--border);
+      padding: 16px 12px;
+      display: flex; flex-direction: column;
+      overflow-y: auto;
+    }
+    .sidebar-section { margin-bottom: 24px; }
+    .sidebar-label {
+      font-size: 11px; font-weight: 700; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.8px;
+      padding: 0 12px; margin-bottom: 8px;
+    }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 10px;
+      font-size: 14px; color: var(--text-muted);
+      cursor: pointer; transition: all 0.15s;
+      border: none; background: none; width: 100%;
+      text-align: right; font-family: inherit;
+    }
+    .sidebar-item:hover { background: var(--bg-hover); color: var(--text); }
+    .sidebar-item.active {
+      background: rgba(139,92,246,0.12);
+      color: var(--purple-light); font-weight: 600;
+    }
+    .sidebar-icon { font-size: 16px; width: 20px; text-align: center; }
+
+    .sidebar-spacer { flex: 1; }
+
+    /* Quick Status */
+    .sidebar-status {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .sidebar-status-title {
+      font-size: 12px; font-weight: 700; color: var(--text-dim);
+      margin-bottom: 12px; text-transform: uppercase;
+    }
+    .sidebar-status-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 0; font-size: 13px;
+    }
+    .sidebar-status-name { display: flex; align-items: center; gap: 6px; color: var(--text-muted); }
+    .sidebar-status-badge {
+      padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600;
+    }
+    .badge-on { background: rgba(16,185,129,0.15); color: var(--green); }
+    .badge-off { background: rgba(239,68,68,0.15); color: var(--red); }
+
+    /* ==================== CONTENT AREA ==================== */
+    .content {
+      flex: 1; overflow-y: auto; overflow-x: hidden;
+      padding: 24px;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.2s;
+    }
+    .stat-card:hover { border-color: var(--border-light); background: var(--bg-hover); }
+    .stat-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .stat-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+    .stat-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .stat-value { font-size: 28px; font-weight: 900; }
+    .stat-change {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 12px; font-weight: 600; margin-top: 4px;
+      padding: 2px 8px; border-radius: 6px;
+    }
+    .stat-change.up { background: rgba(16,185,129,0.1); color: var(--green); }
+    .stat-change.down { background: rgba(239,68,68,0.1); color: var(--red); }
+
+    /* Panel Sections */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .panel-title {
+      font-size: 20px; font-weight: 800; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    /* Card Grid */
+    .card-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+      margin-bottom: 24px;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--border-light); }
+    .card-title {
+      font-size: 15px; font-weight: 700; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* Table */
+    .data-table {
+      width: 100%; border-collapse: collapse;
+    }
+    .data-table th {
+      text-align: right; padding: 12px 16px; font-size: 12px;
+      color: var(--text-dim); font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.5px; border-bottom: 1px solid var(--border);
+    }
+    .data-table td {
+      padding: 14px 16px; font-size: 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .data-table tr:hover td { background: var(--bg-hover); }
+    .data-table .name { color: var(--text); font-weight: 600; }
+    .table-badge {
+      padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
+    }
+    .table-badge.active { background: rgba(16,185,129,0.15); color: var(--green); }
+    .table-badge.paused { background: rgba(245,158,11,0.15); color: var(--yellow); }
+    .table-badge.draft { background: rgba(139,92,246,0.15); color: var(--purple-light); }
+    .table-badge.hot { background: rgba(239,68,68,0.15); color: var(--red); }
+    .table-badge.warm { background: rgba(249,115,22,0.15); color: var(--orange); }
+    .table-badge.cold { background: rgba(99,102,241,0.15); color: var(--indigo); }
+
+    /* Iframe container */
+    .iframe-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      height: calc(100vh - 200px);
+    }
+    .iframe-header {
+      padding: 12px 20px;
+      background: rgba(0,0,0,0.3);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .iframe-title { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .iframe-badge {
+      padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
+      background: rgba(16,185,129,0.15); color: var(--green);
+    }
+    .iframe-wrap iframe {
+      width: 100%; height: calc(100% - 44px); border: none;
+    }
+
+    /* Chart placeholder */
+    .chart-placeholder {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 300px;
+    }
+    .chart-bars {
+      display: flex; align-items: flex-end; gap: 8px;
+      height: 160px; margin-bottom: 20px;
+    }
+    .chart-bar {
+      width: 32px; border-radius: 6px 6px 0 0;
+      animation: growBar 1s ease forwards;
+      opacity: 0;
+    }
+    @keyframes growBar {
+      from { height: 0; opacity: 0; }
+      to { opacity: 1; }
+    }
+    .chart-label { font-size: 13px; color: var(--text-muted); }
+
+    /* Lead cards */
+    .lead-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .lead-item:last-child { border: none; }
+    .lead-avatar {
+      width: 40px; height: 40px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700;
+    }
+    .lead-info { flex: 1; }
+    .lead-name { font-size: 14px; font-weight: 600; color: var(--text); }
+    .lead-meta { font-size: 12px; color: var(--text-muted); }
+    .lead-source { font-size: 11px; }
+
+    /* ==================== FOOTER STATUS ==================== */
+    .bottom-bar {
+      height: 32px; min-height: 32px;
+      background: var(--bg-sidebar);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px;
+      font-size: 11px; color: var(--text-dim);
+    }
+    .bottom-bar-items { display: flex; gap: 20px; }
+    .bottom-item { display: flex; align-items: center; gap: 5px; }
+
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+      .card-grid { grid-template-columns: 1fr; }
+      .topbar-tabs { overflow-x: auto; gap: 2px; }
+      .topbar-tab { padding: 6px 12px; font-size: 13px; white-space: nowrap; }
+    }
+    @media (max-width: 480px) {
+      .stats-bar { grid-template-columns: 1fr; }
+      .content { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== TOP BAR ==================== -->
+  <div class="topbar">
+    <div class="topbar-right">
+      <div class="topbar-logo">
+        <div class="topbar-logo-icon">A</div>
+        <span class="topbar-logo-text">CRM</span>
+      </div>
+      <div class="topbar-tabs">
+        <button class="topbar-tab active" data-tab="overview" onclick="switchTab('overview', this)">
+          📊 סקירה
+        </button>
+        <button class="topbar-tab ted" data-tab="ted" onclick="switchTab('ted', this)">
+          💬 Ted
+        </button>
+        <button class="topbar-tab" data-tab="aria" onclick="switchTab('aria', this)">
+          🎯 ARIA
+        </button>
+        <button class="topbar-tab" data-tab="leads" onclick="switchTab('leads', this)">
+          👥 לידים
+        </button>
+        <button class="topbar-tab" data-tab="analytics" onclick="switchTab('analytics', this)">
+          📈 אנליטיקס
+        </button>
+      </div>
+    </div>
+    <div class="topbar-left">
+      <div class="topbar-status">
+        <div class="status-dot" id="ted-dot"></div>
+        Ted
+      </div>
+      <div class="topbar-status">
+        <div class="status-dot" id="aria-dot"></div>
+        ARIA
+      </div>
+      <a href="index.html" class="topbar-home">← דף הבית</a>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <!-- ==================== SIDEBAR ==================== -->
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">ניווט ראשי</div>
+        <button class="sidebar-item active" onclick="switchTab('overview', document.querySelector('[data-tab=overview]'))">
+          <span class="sidebar-icon">📊</span> סקירה כללית
+        </button>
+        <button class="sidebar-item" onclick="switchTab('ted', document.querySelector('[data-tab=ted]'))">
+          <span class="sidebar-icon">💬</span> Ted — וואטסאפ
+        </button>
+        <button class="sidebar-item" onclick="switchTab('aria', document.querySelector('[data-tab=aria]'))">
+          <span class="sidebar-icon">🎯</span> ARIA — קמפיינים
+        </button>
+        <button class="sidebar-item" onclick="switchTab('leads', document.querySelector('[data-tab=leads]'))">
+          <span class="sidebar-icon">👥</span> לידים
+        </button>
+        <button class="sidebar-item" onclick="switchTab('analytics', document.querySelector('[data-tab=analytics]'))">
+          <span class="sidebar-icon">📈</span> אנליטיקס
+        </button>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-label">פעולות מהירות</div>
+        <button class="sidebar-item" onclick="switchTab('aria', document.querySelector('[data-tab=aria]'))">
+          <span class="sidebar-icon">➕</span> קמפיין חדש
+        </button>
+        <button class="sidebar-item" onclick="switchTab('ted', document.querySelector('[data-tab=ted]'))">
+          <span class="sidebar-icon">📤</span> שלח הודעה
+        </button>
+      </div>
+
+      <div class="sidebar-spacer"></div>
+
+      <div class="sidebar-status">
+        <div class="sidebar-status-title">סטטוס מערכות</div>
+        <div class="sidebar-status-item">
+          <span class="sidebar-status-name"><span class="status-dot"></span> Ted</span>
+          <span class="sidebar-status-badge badge-on" id="sidebar-ted-badge">פעיל</span>
+        </div>
+        <div class="sidebar-status-item">
+          <span class="sidebar-status-name"><span class="status-dot"></span> ARIA</span>
+          <span class="sidebar-status-badge badge-on" id="sidebar-aria-badge">פעילה</span>
+        </div>
+        <div class="sidebar-status-item">
+          <span class="sidebar-status-name"><span class="status-dot"></span> Supabase</span>
+          <span class="sidebar-status-badge badge-on">מחובר</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== CONTENT ==================== -->
+    <div class="content">
+
+      <!-- ===== OVERVIEW PANEL ===== -->
+      <div class="panel active" id="panel-overview">
+        <div class="stats-bar">
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">הודעות היום</span>
+              <div class="stat-icon" style="background:rgba(249,115,22,0.1);">💬</div>
+            </div>
+            <div class="stat-value" id="stat-messages">1,284</div>
+            <span class="stat-change up">↑ 12%</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">קמפיינים פעילים</span>
+              <div class="stat-icon" style="background:rgba(139,92,246,0.1);">🎯</div>
+            </div>
+            <div class="stat-value" id="stat-campaigns">23</div>
+            <span class="stat-change up">↑ 3 חדשים</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">לידים חדשים</span>
+              <div class="stat-icon" style="background:rgba(16,185,129,0.1);">👥</div>
+            </div>
+            <div class="stat-value" id="stat-leads">847</div>
+            <span class="stat-change up">↑ 28%</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">ROI ממוצע</span>
+              <div class="stat-icon" style="background:rgba(99,102,241,0.1);">📊</div>
+            </div>
+            <div class="stat-value">340%</div>
+            <span class="stat-change up">↑ 15%</span>
+          </div>
+        </div>
+
+        <div class="card-grid">
+          <!-- Recent Messages -->
+          <div class="card">
+            <div class="card-title">💬 הודעות אחרונות — Ted</div>
+            <div class="lead-item">
+              <div class="lead-avatar" style="background:rgba(249,115,22,0.15); color:var(--orange);">ד</div>
+              <div class="lead-info">
+                <div class="lead-name">דניאל כהן</div>
+                <div class="lead-meta">היי, רציתי לשאול על המחירים...</div>
+              </div>
+              <span class="lead-source table-badge hot">חם</span>
+            </div>
+            <div class="lead-item">
+              <div class="lead-avatar" style="background:rgba(139,92,246,0.15); color:var(--purple);">מ</div>
+              <div class="lead-info">
+                <div class="lead-name">מיכל לוי</div>
+                <div class="lead-meta">תודה על המידע, אני מעוניינת!</div>
+              </div>
+              <span class="lead-source table-badge warm">חם</span>
+            </div>
+            <div class="lead-item">
+              <div class="lead-avatar" style="background:rgba(16,185,129,0.15); color:var(--green);">א</div>
+              <div class="lead-info">
+                <div class="lead-name">אבי ישראלי</div>
+                <div class="lead-meta">מתי אפשר להתחיל?</div>
+              </div>
+              <span class="lead-source table-badge active">סגור</span>
+            </div>
+          </div>
+
+          <!-- Active Campaigns -->
+          <div class="card">
+            <div class="card-title">🎯 קמפיינים פעילים — ARIA</div>
+            <table class="data-table">
+              <thead>
+                <tr><th>שם</th><th>פלטפורמה</th><th>סטטוס</th><th>ROI</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="name">קמפיין חורף 2025</td>
+                  <td>📘 Facebook</td>
+                  <td><span class="table-badge active">פעיל</span></td>
+                  <td style="color:var(--green);">+285%</td>
+                </tr>
+                <tr>
+                  <td class="name">השקת מוצר חדש</td>
+                  <td>🔍 Google</td>
+                  <td><span class="table-badge active">פעיל</span></td>
+                  <td style="color:var(--green);">+420%</td>
+                </tr>
+                <tr>
+                  <td class="name">ריטרגטינג Q1</td>
+                  <td>📘 Facebook</td>
+                  <td><span class="table-badge paused">מושהה</span></td>
+                  <td style="color:var(--yellow);">+140%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Performance Chart -->
+        <div class="card" style="margin-bottom:24px;">
+          <div class="card-title">📈 ביצועים — 7 ימים אחרונים</div>
+          <div class="chart-bars" id="overview-chart">
+            <!-- Generated by JS -->
+          </div>
+          <div style="display:flex; gap:24px; font-size:12px; color:var(--text-muted);">
+            <span>🟠 הודעות</span>
+            <span>🟣 קמפיינים</span>
+            <span>🟢 לידים</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== TED PANEL ===== -->
+      <div class="panel" id="panel-ted">
+        <div class="panel-title">💬 Ted — ניהול וואטסאפ</div>
+        <div class="iframe-wrap">
+          <div class="iframe-header">
+            <div class="iframe-title">
+              <span style="color:var(--orange);">●</span> Ted Dashboard
+            </div>
+            <span class="iframe-badge">● מחובר</span>
+          </div>
+          <iframe src="http://localhost:3777" id="ted-iframe"></iframe>
+        </div>
+      </div>
+
+      <!-- ===== ARIA PANEL ===== -->
+      <div class="panel" id="panel-aria">
+        <div class="panel-title">🎯 ARIA — ניהול קמפיינים</div>
+        <div class="iframe-wrap">
+          <div class="iframe-header">
+            <div class="iframe-title">
+              <span style="color:var(--purple);">●</span> ARIA MCP Dashboard
+            </div>
+            <span class="iframe-badge">● מחוברת</span>
+          </div>
+          <iframe src="http://localhost:3888" id="aria-iframe"></iframe>
+        </div>
+      </div>
+
+      <!-- ===== LEADS PANEL ===== -->
+      <div class="panel" id="panel-leads">
+        <div class="panel-title">👥 לידים מכל המקורות</div>
+
+        <div class="stats-bar" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">לידים חמים</span>
+              <div class="stat-icon" style="background:rgba(239,68,68,0.1);">🔥</div>
+            </div>
+            <div class="stat-value">124</div>
+            <span class="stat-change up">↑ 18%</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">מוואטסאפ</span>
+              <div class="stat-icon" style="background:rgba(249,115,22,0.1);">💬</div>
+            </div>
+            <div class="stat-value">389</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">מקמפיינים</span>
+              <div class="stat-icon" style="background:rgba(139,92,246,0.1);">🎯</div>
+            </div>
+            <div class="stat-value">458</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">רשימת לידים</div>
+          <table class="data-table">
+            <thead>
+              <tr><th>שם</th><th>מקור</th><th>סטטוס</th><th>תאריך</th><th>פעולה אחרונה</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="name">דניאל כהן</td>
+                <td>💬 וואטסאפ</td>
+                <td><span class="table-badge hot">חם 🔥</span></td>
+                <td>היום 14:32</td>
+                <td>שאל על מחירים</td>
+              </tr>
+              <tr>
+                <td class="name">שרה אברהם</td>
+                <td>📘 Facebook</td>
+                <td><span class="table-badge warm">חמים</span></td>
+                <td>היום 12:15</td>
+                <td>לחצה על מודעה</td>
+              </tr>
+              <tr>
+                <td class="name">יוסי חדד</td>
+                <td>🔍 Google</td>
+                <td><span class="table-badge warm">חמים</span></td>
+                <td>אתמול 18:44</td>
+                <td>מילא טופס</td>
+              </tr>
+              <tr>
+                <td class="name">רחל מזרחי</td>
+                <td>💬 וואטסאפ</td>
+                <td><span class="table-badge active">סגור ✓</span></td>
+                <td>אתמול 10:20</td>
+                <td>רכשה חבילה</td>
+              </tr>
+              <tr>
+                <td class="name">עמית פרידמן</td>
+                <td>📘 Facebook</td>
+                <td><span class="table-badge cold">קר</span></td>
+                <td>לפני 3 ימים</td>
+                <td>צפה בדף</td>
+              </tr>
+              <tr>
+                <td class="name">נועה ברק</td>
+                <td>🔍 Google</td>
+                <td><span class="table-badge hot">חם 🔥</span></td>
+                <td>היום 16:05</td>
+                <td>בקשת הצעת מחיר</td>
+              </tr>
+              <tr>
+                <td class="name">אלון גולד</td>
+                <td>💬 וואטסאפ</td>
+                <td><span class="table-badge warm">חמים</span></td>
+                <td>אתמול 21:30</td>
+                <td>שאל שאלות</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===== ANALYTICS PANEL ===== -->
+      <div class="panel" id="panel-analytics">
+        <div class="panel-title">📈 אנליטיקס ודוחות</div>
+
+        <div class="stats-bar">
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">הכנסות החודש</span>
+              <div class="stat-icon" style="background:rgba(16,185,129,0.1);">💰</div>
+            </div>
+            <div class="stat-value">₪48,200</div>
+            <span class="stat-change up">↑ 22%</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">הוצאות פרסום</span>
+              <div class="stat-icon" style="background:rgba(239,68,68,0.1);">📊</div>
+            </div>
+            <div class="stat-value">₪12,400</div>
+            <span class="stat-change down">↓ 8%</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">רווח נקי</span>
+              <div class="stat-icon" style="background:rgba(99,102,241,0.1);">💎</div>
+            </div>
+            <div class="stat-value">₪35,800</div>
+            <span class="stat-change up">↑ 34%</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">עלות לליד</span>
+              <div class="stat-icon" style="background:rgba(6,182,212,0.1);">🎯</div>
+            </div>
+            <div class="stat-value">₪14.6</div>
+            <span class="stat-change up">↓ 12%</span>
+          </div>
+        </div>
+
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-title">📊 לידים לפי מקור</div>
+            <div style="padding: 20px 0;">
+              <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+                <div style="width:120px; font-size:13px; color:var(--text-muted);">💬 וואטסאפ</div>
+                <div style="flex:1; height:24px; background:var(--bg); border-radius:8px; overflow:hidden;">
+                  <div style="width:46%; height:100%; background: linear-gradient(90deg, #f97316, #fb923c); border-radius:8px;"></div>
+                </div>
+                <span style="font-size:13px; font-weight:700;">46%</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+                <div style="width:120px; font-size:13px; color:var(--text-muted);">📘 Facebook</div>
+                <div style="flex:1; height:24px; background:var(--bg); border-radius:8px; overflow:hidden;">
+                  <div style="width:32%; height:100%; background: linear-gradient(90deg, #3b82f6, #60a5fa); border-radius:8px;"></div>
+                </div>
+                <span style="font-size:13px; font-weight:700;">32%</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px;">
+                <div style="width:120px; font-size:13px; color:var(--text-muted);">🔍 Google</div>
+                <div style="flex:1; height:24px; background:var(--bg); border-radius:8px; overflow:hidden;">
+                  <div style="width:22%; height:100%; background: linear-gradient(90deg, #10b981, #34d399); border-radius:8px;"></div>
+                </div>
+                <span style="font-size:13px; font-weight:700;">22%</span>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">🏆 קמפיינים מובילים</div>
+            <table class="data-table">
+              <thead>
+                <tr><th>קמפיין</th><th>ROI</th><th>לידים</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="name">השקת מוצר חדש</td>
+                  <td style="color:var(--green); font-weight:700;">+420%</td>
+                  <td>234</td>
+                </tr>
+                <tr>
+                  <td class="name">קמפיין חורף 2025</td>
+                  <td style="color:var(--green); font-weight:700;">+285%</td>
+                  <td>189</td>
+                </tr>
+                <tr>
+                  <td class="name">ריטרגטינג Q1</td>
+                  <td style="color:var(--yellow); font-weight:700;">+140%</td>
+                  <td>78</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Weekly chart -->
+        <div class="card">
+          <div class="card-title">📈 מגמות — 30 יום אחרונים</div>
+          <div class="chart-bars" id="analytics-chart"></div>
+          <div style="display:flex; gap:24px; font-size:12px; color:var(--text-muted);">
+            <span>🟢 הכנסות</span>
+            <span>🔴 הוצאות</span>
+            <span>🟣 לידים</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== BOTTOM BAR ==================== -->
+  <div class="bottom-bar">
+    <div class="bottom-bar-items">
+      <div class="bottom-item">
+        <div class="status-dot"></div>
+        כל המערכות פעילות
+      </div>
+      <div class="bottom-item" id="uptime-display">זמן פעילות: 0m</div>
+    </div>
+    <div>ARIA & Ted CRM v1.0</div>
+  </div>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <script>
+    // Tab switching
+    function switchTab(tabId, btn) {
+      // Update tab buttons
+      document.querySelectorAll('.topbar-tab').forEach(t => t.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      // Update sidebar items
+      document.querySelectorAll('.sidebar-item').forEach((item, i) => {
+        const tabs = ['overview', 'ted', 'aria', 'leads', 'analytics'];
+        item.classList.toggle('active', tabs[i] === tabId);
+      });
+
+      // Show panel
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      const panel = document.getElementById('panel-' + tabId);
+      if (panel) panel.classList.add('active');
+    }
+
+    // Generate chart bars
+    function generateChart(containerId, colors, count) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = '';
+      const days = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'];
+
+      for (let i = 0; i < (count || 7); i++) {
+        const group = document.createElement('div');
+        group.style.cssText = 'display:flex; flex-direction:column; align-items:center; gap:4px;';
+
+        colors.forEach((color, ci) => {
+          const bar = document.createElement('div');
+          const height = 30 + Math.random() * 100;
+          bar.className = 'chart-bar';
+          bar.style.cssText = `background:${color}; height:${height}px; animation-delay:${(i * 0.08 + ci * 0.03)}s;`;
+          group.appendChild(bar);
+        });
+
+        const label = document.createElement('div');
+        label.style.cssText = 'font-size:11px; color:var(--text-dim); margin-top:4px;';
+        label.textContent = days[i % 7];
+        group.appendChild(label);
+
+        container.appendChild(group);
+      }
+    }
+
+    generateChart('overview-chart', ['#f97316', '#8b5cf6', '#10b981'], 7);
+    generateChart('analytics-chart', ['#10b981', '#ef4444', '#8b5cf6'], 14);
+
+    // Check Ted status
+    async function checkTedStatus() {
+      try {
+        const resp = await fetch('http://localhost:3777/api/status', { signal: AbortSignal.timeout(3000) });
+        document.getElementById('ted-dot').classList.remove('offline');
+        document.getElementById('sidebar-ted-badge').className = 'sidebar-status-badge badge-on';
+        document.getElementById('sidebar-ted-badge').textContent = 'פעיל';
+      } catch {
+        document.getElementById('ted-dot').classList.add('offline');
+        document.getElementById('sidebar-ted-badge').className = 'sidebar-status-badge badge-off';
+        document.getElementById('sidebar-ted-badge').textContent = 'לא פעיל';
+      }
+    }
+
+    // Check ARIA status
+    async function checkAriaStatus() {
+      try {
+        const resp = await fetch('http://localhost:3888/api/status', { signal: AbortSignal.timeout(3000) });
+        document.getElementById('aria-dot').classList.remove('offline');
+        document.getElementById('sidebar-aria-badge').className = 'sidebar-status-badge badge-on';
+        document.getElementById('sidebar-aria-badge').textContent = 'פעילה';
+      } catch {
+        document.getElementById('aria-dot').classList.add('offline');
+        document.getElementById('sidebar-aria-badge').className = 'sidebar-status-badge badge-off';
+        document.getElementById('sidebar-aria-badge').textContent = 'לא פעילה';
+      }
+    }
+
+    // Uptime counter
+    const startTime = Date.now();
+    function updateUptime() {
+      const secs = Math.floor((Date.now() - startTime) / 1000);
+      const mins = Math.floor(secs / 60);
+      const hrs = Math.floor(mins / 60);
+      const display = hrs > 0 ? `${hrs}h ${mins%60}m` : `${mins}m ${secs%60}s`;
+      document.getElementById('uptime-display').textContent = `זמן פעילות: ${display}`;
+    }
+
+    // Initial checks
+    checkTedStatus();
+    checkAriaStatus();
+    setInterval(checkTedStatus, 10000);
+    setInterval(checkAriaStatus, 10000);
+    setInterval(updateUptime, 1000);
+  </script>
+</body>
+</html>
